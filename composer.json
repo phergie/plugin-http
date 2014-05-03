@@ -1,0 +1,24 @@
+{
+    "name": "wyrihaximus/phergie-http",
+    "description": "Phergie plugin for Provide HTTP functionality to other plugins",
+    "keywords": [ "irc", "bot", "react", "plugin", "phergie", "phergieplugin" ],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/WyriHaximus/PhergieHttp/issues",
+        "source": "https://github.com/WyriHaximus/PhergieHttp"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "phergie/phergie-irc-plugin-react-command": "1.0.*",
+        "react/http-client": "0.3.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*",
+        "phake/phake": "1.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "WyriHaximus\\Phergie\\Plugin\\Http\\": "src"
+        }
+    }
+}
