@@ -101,7 +101,7 @@ class Plugin extends AbstractPlugin
 
         $factory = new Factory();
 
-        $this->resolver = $factory->createCached($this->dnsServer, $this->loop);
+        $this->resolver = $factory->createCached('8.8.8.8', $this->loop);
 
         return $this->resolver;
     }
