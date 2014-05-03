@@ -47,7 +47,7 @@ class Plugin extends AbstractPlugin
     public function getSubscribedEvents()
     {
         return array(
-            'services.http' => 'provideHttpService',
+            'http.request' => 'makeHttpRequest',
         );
     }
 
@@ -57,7 +57,7 @@ class Plugin extends AbstractPlugin
      * @param \Phergie\Irc\Event\EventInterface $event
      * @param \Phergie\Irc\Bot\React\EventQueueInterface $queue
      */
-    public function provideHttpService(EventInterface $event, EventQueueInterface $queue)
+    public function makeHttpRequest(EventInterface $event, EventQueueInterface $queue)
     {
         $deferred = new Deferred();
 
