@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "82f08773e6733c582d90f30c9110a7d5",
+    "hash": "b35883c1d4486752a4bb622d6885c656",
     "packages": [
         {
             "name": "evenement/evenement",
@@ -52,28 +52,23 @@
         },
         {
             "name": "guzzle/parser",
-            "version": "v3.9.0",
+            "version": "v2.8.8",
             "target-dir": "Guzzle/Parser",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/parser.git",
-                "reference": "6874d171318a8e93eb6d224cf85e4678490b625c"
+                "reference": "8f5152833af2d9505bcefb0a10c4b6987aa9a6b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/parser/zipball/6874d171318a8e93eb6d224cf85e4678490b625c",
-                "reference": "6874d171318a8e93eb6d224cf85e4678490b625c",
+                "url": "https://api.github.com/repos/guzzle/parser/zipball/8f5152833af2d9505bcefb0a10c4b6987aa9a6b1",
+                "reference": "8f5152833af2d9505bcefb0a10c4b6987aa9a6b1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.7-dev"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Guzzle\\Parser": ""
@@ -92,44 +87,48 @@
                 "message",
                 "url"
             ],
-            "time": "2014-02-05 18:29:46"
+            "time": "2012-09-20 20:28:06"
         },
         {
-            "name": "guzzlehttp/guzzle",
-            "version": "dev-master",
+            "name": "monolog/monolog",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "bc640c29e0ab136ee711b739bcf6abe430e69f46"
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "f72392d0e6eb855118f5a84e89ac2d257c704abd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/bc640c29e0ab136ee711b739bcf6abe430e69f46",
-                "reference": "bc640c29e0ab136ee711b739bcf6abe430e69f46",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f72392d0e6eb855118f5a84e89ac2d257c704abd",
+                "reference": "f72392d0e6eb855118f5a84e89ac2d257c704abd",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/streams": "~1.0",
-                "php": ">=5.4.0"
+                "php": ">=5.3.0",
+                "psr/log": "~1.0"
             },
             "require-dev": {
-                "ext-curl": "*",
-                "phpunit/phpunit": "~4.0",
-                "psr/log": "~1.0"
+                "doctrine/couchdb": "dev-master",
+                "mlehner/gelf-php": "1.0.*",
+                "raven/raven": "0.5.*"
+            },
+            "suggest": {
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB server",
+                "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "raven/raven": "Allow sending log messages to a Sentry server"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0.x-dev"
+                    "dev-master": "1.6.x-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
+                "psr-0": {
+                    "Monolog": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -137,43 +136,310 @@
             ],
             "authors": [
                 {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be",
+                    "role": "Developer"
                 }
             ],
-            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
-            "homepage": "http://guzzlephp.org/",
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "homepage": "http://github.com/Seldaek/monolog",
             "keywords": [
-                "client",
-                "curl",
-                "framework",
-                "http",
-                "http client",
-                "rest",
-                "web service"
+                "log",
+                "logging",
+                "psr-3"
             ],
-            "time": "2014-04-30 21:42:53"
+            "time": "2013-07-28 22:38:30"
         },
         {
-            "name": "guzzlehttp/streams",
-            "version": "1.1.0",
+            "name": "phergie/phergie-irc-bot-react",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/guzzle/streams.git",
-                "reference": "cf0c8c33ca95cc147efba4c714f630ee44767180"
+                "url": "https://github.com/phergie/phergie-irc-bot-react.git",
+                "reference": "b6b5b874e79131d1800dfa3f458236a2eb31be0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/streams/zipball/cf0c8c33ca95cc147efba4c714f630ee44767180",
-                "reference": "cf0c8c33ca95cc147efba4c714f630ee44767180",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-bot-react/zipball/b6b5b874e79131d1800dfa3f458236a2eb31be0f",
+                "reference": "b6b5b874e79131d1800dfa3f458236a2eb31be0f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "evenement/evenement": "1.0.*",
+                "monolog/monolog": "1.6.*",
+                "phergie/phergie-irc-client-react": "dev-master",
+                "phergie/phergie-irc-connection": "1.1.*",
+                "phergie/phergie-irc-event": "dev-master",
+                "php": ">=5.3.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "phake/phake": "1.0.*",
+                "phpunit/phpunit": "4.0.*"
+            },
+            "bin": [
+                "bin/phergie"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phergie\\Irc\\Bot\\React\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "IRC bot built on React",
+            "keywords": [
+                "bot",
+                "irc",
+                "react"
+            ],
+            "time": "2014-04-29 05:09:30"
+        },
+        {
+            "name": "phergie/phergie-irc-client-react",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phergie/phergie-irc-client-react.git",
+                "reference": "2826e4b514957f99b71a145b49eeecdf07c58c6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-client-react/zipball/2826e4b514957f99b71a145b49eeecdf07c58c6f",
+                "reference": "2826e4b514957f99b71a145b49eeecdf07c58c6f",
+                "shasum": ""
+            },
+            "require": {
+                "monolog/monolog": "1.6.*",
+                "phergie/phergie-irc-connection": "1.1.*",
+                "phergie/phergie-irc-generator": "1.2.*",
+                "phergie/phergie-irc-parser": "1.3.*",
+                "php": ">=5.3.3",
+                "psr/log": "~1.0",
+                "react/event-loop": "0.3.*",
+                "react/stream": "0.3.*"
+            },
+            "require-dev": {
+                "phake/phake": "2.0.0-alpha4",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phergie\\Irc\\Client\\React\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "IRC client library built on React",
+            "keywords": [
+                "client",
+                "irc",
+                "react"
+            ],
+            "time": "2014-04-28 22:25:07"
+        },
+        {
+            "name": "phergie/phergie-irc-connection",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phergie/phergie-irc-connection.git",
+                "reference": "96521084b6931df13cbcd77a40f9fd7c4cd79d18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-connection/zipball/96521084b6931df13cbcd77a40f9fd7c4cd79d18",
+                "reference": "96521084b6931df13cbcd77a40f9fd7c4cd79d18",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Phergie": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "Data structure for containing information about an IRC client connection",
+            "keywords": [
+                "Connection",
+                "client",
+                "irc",
+                "server"
+            ],
+            "time": "2013-07-15 16:35:58"
+        },
+        {
+            "name": "phergie/phergie-irc-event",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phergie/phergie-irc-event.git",
+                "reference": "a51278ab28afd1aaab17ee5d6d82f39fb77884c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-event/zipball/a51278ab28afd1aaab17ee5d6d82f39fb77884c1",
+                "reference": "a51278ab28afd1aaab17ee5d6d82f39fb77884c1",
+                "shasum": ""
+            },
+            "require": {
+                "phergie/phergie-irc-connection": "1.1.*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phake/phake": "1.0.*",
+                "phpunit/phpunit": "4.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phergie\\Irc\\Event\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "PHP data structure for IRC event information",
+            "keywords": [
+                "event",
+                "irc"
+            ],
+            "time": "2014-05-01 00:00:12"
+        },
+        {
+            "name": "phergie/phergie-irc-generator",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phergie/phergie-irc-generator.git",
+                "reference": "d03ec9998344caeb360956e62da6214e071b4b49"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-generator/zipball/d03ec9998344caeb360956e62da6214e071b4b49",
+                "reference": "d03ec9998344caeb360956e62da6214e071b4b49",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Phergie": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "Generator for messages conforming to the IRC protocol",
+            "keywords": [
+                "generator",
+                "irc"
+            ],
+            "time": "2013-10-05 12:03:37"
+        },
+        {
+            "name": "phergie/phergie-irc-parser",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phergie/phergie-irc-parser.git",
+                "reference": "9d9b7e596b78214b73c153a35c1e7498470c2d14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-parser/zipball/9d9b7e596b78214b73c153a35c1e7498470c2d14",
+                "reference": "9d9b7e596b78214b73c153a35c1e7498470c2d14",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Phergie": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "Parser for messages conforming to the IRC protocol",
+            "keywords": [
+                "irc",
+                "parser"
+            ],
+            "time": "2013-10-05 11:55:30"
+        },
+        {
+            "name": "phergie/phergie-irc-plugin-react-command",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phergie/phergie-irc-plugin-react-command.git",
+                "reference": "e20a2fc4520289fa4e7cda575c6b24ebf1d6b943"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-plugin-react-command/zipball/e20a2fc4520289fa4e7cda575c6b24ebf1d6b943",
+                "reference": "e20a2fc4520289fa4e7cda575c6b24ebf1d6b943",
+                "shasum": ""
+            },
+            "require": {
+                "phergie/phergie-irc-bot-react": "dev-master"
+            },
+            "require-dev": {
+                "phake/phake": "1.0.*",
+                "phpunit/phpunit": "4.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phergie\\Irc\\Plugin\\React\\Command\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "Phergie plugin for parsing commands issued to the bot",
+            "keywords": [
+                "bot",
+                "irc",
+                "plugin",
+                "react"
+            ],
+            "time": "2014-04-20 18:43:07"
+        },
+        {
+            "name": "psr/log",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "a78d6504ff5d4367497785ab2ade91db3a9fbe11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/a78d6504ff5d4367497785ab2ade91db3a9fbe11",
+                "reference": "a78d6504ff5d4367497785ab2ade91db3a9fbe11",
+                "shasum": ""
             },
             "type": "library",
             "extra": {
@@ -182,12 +448,9 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Stream\\": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -195,18 +458,185 @@
             ],
             "authors": [
                 {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
-            "description": "Provides a simple abstraction over streams of data (Guzzle 4+)",
-            "homepage": "http://guzzlephp.org/",
+            "description": "Common interface for logging libraries",
             "keywords": [
-                "Guzzle",
-                "stream"
+                "log",
+                "psr",
+                "psr-3"
             ],
-            "time": "2014-04-03 04:48:24"
+            "time": "2014-01-18 15:33:09"
+        },
+        {
+            "name": "react/cache",
+            "version": "v0.3.2",
+            "target-dir": "React/Cache",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/cache.git",
+                "reference": "a821f4318e38fc7efd02d81698fcee9d3d34dafe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/cache/zipball/a821f4318e38fc7efd02d81698fcee9d3d34dafe",
+                "reference": "a821f4318e38fc7efd02d81698fcee9d3d34dafe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "react/promise": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "React\\Cache": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Async caching.",
+            "keywords": [
+                "cache"
+            ],
+            "time": "2013-04-24 08:33:43"
+        },
+        {
+            "name": "react/dns",
+            "version": "v0.3.2",
+            "target-dir": "React/Dns",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/dns.git",
+                "reference": "c8c9c57750cb24e8f7b87bc62fee10750f1f9fbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/dns/zipball/c8c9c57750cb24e8f7b87bc62fee10750f1f9fbf",
+                "reference": "c8c9c57750cb24e8f7b87bc62fee10750f1f9fbf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "react/cache": "0.3.*",
+                "react/promise": "~1.0",
+                "react/socket": "0.3.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "React\\Dns": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Async DNS resolver.",
+            "keywords": [
+                "dns",
+                "dns-resolver"
+            ],
+            "time": "2013-04-27 08:57:30"
+        },
+        {
+            "name": "react/event-loop",
+            "version": "v0.3.3",
+            "target-dir": "React/EventLoop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/event-loop.git",
+                "reference": "49208fa3a15c9eae4adf8351ee9caa4064fe550d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/49208fa3a15c9eae4adf8351ee9caa4064fe550d",
+                "reference": "49208fa3a15c9eae4adf8351ee9caa4064fe550d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-libev": "*",
+                "ext-libevent": ">=0.0.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "React\\EventLoop": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Event loop abstraction layer that libraries can use for evented I/O.",
+            "keywords": [
+                "event-loop"
+            ],
+            "time": "2013-07-08 22:38:22"
+        },
+        {
+            "name": "react/http-client",
+            "version": "v0.3.2",
+            "target-dir": "React/HttpClient",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/http-client.git",
+                "reference": "b96aa5dfa23c83e669de8d4acb717b03ae70c088"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/http-client/zipball/b96aa5dfa23c83e669de8d4acb717b03ae70c088",
+                "reference": "b96aa5dfa23c83e669de8d4acb717b03ae70c088",
+                "shasum": ""
+            },
+            "require": {
+                "guzzle/parser": "2.8.*",
+                "php": ">=5.3.3",
+                "react/dns": "0.3.*",
+                "react/socket-client": "0.3.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "React\\HttpClient": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Asynchronous HTTP client library.",
+            "keywords": [
+                "http"
+            ],
+            "time": "2013-04-21 12:54:33"
         },
         {
             "name": "react/promise",
@@ -252,38 +682,25 @@
             "time": "2013-04-03 14:05:55"
         },
         {
-            "name": "react/react",
-            "version": "0.3.x-dev",
+            "name": "react/socket",
+            "version": "v0.3.2",
+            "target-dir": "React/Socket",
             "source": {
                 "type": "git",
-                "url": "https://github.com/reactphp/react.git",
-                "reference": "3b9b9d64a277c2f9a090fb8166183b4edd59ac09"
+                "url": "https://github.com/reactphp/socket.git",
+                "reference": "9cc32838d25a934ce950d2662cce2ff1b9e9f8aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/react/zipball/3b9b9d64a277c2f9a090fb8166183b4edd59ac09",
-                "reference": "3b9b9d64a277c2f9a090fb8166183b4edd59ac09",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/9cc32838d25a934ce950d2662cce2ff1b9e9f8aa",
+                "reference": "9cc32838d25a934ce950d2662cce2ff1b9e9f8aa",
                 "shasum": ""
             },
             "require": {
                 "evenement/evenement": "1.0.*",
-                "guzzle/parser": "~3.0",
                 "php": ">=5.3.3",
-                "react/promise": "~1.0"
-            },
-            "replace": {
-                "react/cache": "self.version",
-                "react/dns": "self.version",
-                "react/event-loop": "self.version",
-                "react/http": "self.version",
-                "react/http-client": "self.version",
-                "react/socket": "self.version",
-                "react/socket-client": "self.version",
-                "react/stream": "self.version"
-            },
-            "suggest": {
-                "ext-libev": "*",
-                "ext-libevent": "*"
+                "react/event-loop": "0.3.*",
+                "react/stream": "0.3.*"
             },
             "type": "library",
             "extra": {
@@ -293,63 +710,105 @@
             },
             "autoload": {
                 "psr-0": {
-                    "React": "src"
+                    "React\\Socket": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "description": "Nuclear Reactor written in PHP.",
+            "description": "Library for building an evented socket server.",
             "keywords": [
-                "event-loop",
-                "reactor"
+                "Socket"
             ],
-            "time": "2014-03-30 16:31:26"
+            "time": "2013-04-26 20:23:10"
         },
         {
-            "name": "wyrihaximus/react-guzzle",
-            "version": "dev-master",
+            "name": "react/socket-client",
+            "version": "v0.3.2",
+            "target-dir": "React/SocketClient",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WyriHaximus/ReactGuzzle.git",
-                "reference": "8814cdec24a63bf3563977a98d17b9e75c3f58fd"
+                "url": "https://github.com/reactphp/socket-client.git",
+                "reference": "0696ede9876749dc49670f282aab9f6c8549275b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/ReactGuzzle/zipball/8814cdec24a63bf3563977a98d17b9e75c3f58fd",
-                "reference": "8814cdec24a63bf3563977a98d17b9e75c3f58fd",
+                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/0696ede9876749dc49670f282aab9f6c8549275b",
+                "reference": "0696ede9876749dc49670f282aab9f6c8549275b",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/guzzle": "4.0.*",
-                "react/react": ">=0.3.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "0.9.0",
-                "phpunit/phpunit": "4.0.*",
-                "satooshi/php-coveralls": "~0.6"
+                "php": ">=5.3.3",
+                "react/dns": "0.3.*",
+                "react/event-loop": "0.3.*",
+                "react/promise": "~1.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
             "autoload": {
-                "psr-4": {
-                    "WyriHaximus\\React\\Guzzle\\": "src/",
-                    "WyriHaximus\\React\\Tests\\Guzzle\\": "tests/"
+                "psr-0": {
+                    "React\\SocketClient": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "authors": [
-                {
-                    "name": "Cees-Jan Kiewiet",
-                    "email": "ceesjank@gmail.com",
-                    "homepage": "http://wyrihaximus.net/",
-                    "role": "Maintainer"
-                }
+            "description": "Async connector to open TCP/IP and SSL/TLS based connections.",
+            "keywords": [
+                "Socket"
             ],
-            "time": "2014-04-30 19:43:31"
+            "time": "2013-04-20 14:55:59"
+        },
+        {
+            "name": "react/stream",
+            "version": "v0.3.3",
+            "target-dir": "React/Stream",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/stream.git",
+                "reference": "b72900ab00513b591fb101faecad38f9c8eab8da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/b72900ab00513b591fb101faecad38f9c8eab8da",
+                "reference": "b72900ab00513b591fb101faecad38f9c8eab8da",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "1.0.*",
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "react/event-loop": "0.3.*",
+                "react/promise": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "React\\Stream": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Basic readable and writable stream interfaces that support piping.",
+            "keywords": [
+                "pipe",
+                "stream"
+            ],
+            "time": "2013-07-09 00:44:12"
         }
     ],
     "packages-dev": [
@@ -1037,9 +1496,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "wyrihaximus/react-guzzle": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": [
 
     ],
