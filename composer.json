@@ -9,7 +9,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "phergie/phergie-irc-plugin-react-command": "1.0.*",
+        "phergie/phergie-irc-bot-react": "dev-master",
         "react/http-client": "0.3.*"
     },
     "require-dev": {

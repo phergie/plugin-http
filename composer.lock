@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "b35883c1d4486752a4bb622d6885c656",
+    "hash": "c0013ce234aa03c5a976696ffd52e545",
     "packages": [
         {
             "name": "evenement/evenement",
@@ -386,46 +386,6 @@
                 "parser"
             ],
             "time": "2013-10-05 11:55:30"
-        },
-        {
-            "name": "phergie/phergie-irc-plugin-react-command",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phergie/phergie-irc-plugin-react-command.git",
-                "reference": "e20a2fc4520289fa4e7cda575c6b24ebf1d6b943"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phergie/phergie-irc-plugin-react-command/zipball/e20a2fc4520289fa4e7cda575c6b24ebf1d6b943",
-                "reference": "e20a2fc4520289fa4e7cda575c6b24ebf1d6b943",
-                "shasum": ""
-            },
-            "require": {
-                "phergie/phergie-irc-bot-react": "dev-master"
-            },
-            "require-dev": {
-                "phake/phake": "1.0.*",
-                "phpunit/phpunit": "4.0.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Phergie\\Irc\\Plugin\\React\\Command\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "description": "Phergie plugin for parsing commands issued to the bot",
-            "keywords": [
-                "bot",
-                "irc",
-                "plugin",
-                "react"
-            ],
-            "time": "2014-04-20 18:43:07"
         },
         {
             "name": "psr/log",
@@ -1496,9 +1456,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "phergie/phergie-irc-bot-react": 20
+    },
     "platform": [
 
     ],
