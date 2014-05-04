@@ -68,9 +68,9 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @param \Phergie\Irc\Event\EventInterface $event
      * @param \Phergie\Irc\Bot\React\EventQueueInterface $queue
      */
-    public function makeHttpRequest(Deferred $deferred, $method, $url)
+    public function makeHttpRequest(Deferred $deferred, $method, $url, $headers = array(), $body = '')
     {
-        $request = $this->getClient()->request($method, $url);
+        $request = $this->getClient()->request($method, $url, $headers);
         $request->on('response', function ($response) use ($deferred) {
             $deferred->progress(array(
                 'type' => 'response',
@@ -85,6 +85,9 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         });
         $request->on('end', function () use ($deferred) {
             $deferred->resolve();
+        });
+        $request->on('headers-written', function ($that) use ($body) {
+            $that->write($body);
         });
         $request->end();
     }
