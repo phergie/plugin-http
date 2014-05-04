@@ -13,9 +13,13 @@ namespace WyriHaximus\Phergie\Plugin\Http;
 use Phergie\Irc\Bot\React\AbstractPlugin;
 use Phergie\Irc\Bot\React\EventQueueInterface;
 use Phergie\Irc\Event\EventInterface;
-use React\Promise\Deferred;
+use React\EventLoop\LoopInterface;
+use Phergie\Irc\Client\React\LoopAwareInterface;
 use React\HttpClient\Client as HttpClient;
 use React\HttpClient\Factory as HttpClientFactory;
+use React\Promise\Deferred;
+use React\Dns\Resolver\Factory as ResolverFactory;
+use React\Dns\Resolver\Resolver;
 
 /**
  * Plugin for Provide HTTP functionality to other plugins.
@@ -23,8 +27,11 @@ use React\HttpClient\Factory as HttpClientFactory;
  * @category Phergie
  * @package WyriHaximus\Phergie\Plugin\Http
  */
-class Plugin extends AbstractPlugin
+class Plugin extends AbstractPlugin implements LoopAwareInterface
 {
+    protected $resolver;
+    protected $client;
+
     /**
      * Accepts plugin configuration.
      *
@@ -37,6 +44,10 @@ class Plugin extends AbstractPlugin
     public function __construct(array $config = array())
     {
 
+    }
+
+    public function setLoop(LoopInterface $loop) {
+        $this->loop = $loop;
     }
 
     /**
@@ -57,11 +68,9 @@ class Plugin extends AbstractPlugin
      * @param \Phergie\Irc\Event\EventInterface $event
      * @param \Phergie\Irc\Bot\React\EventQueueInterface $queue
      */
-    public function makeHttpRequest(EventInterface $event, EventQueueInterface $queue)
+    public function makeHttpRequest(Deferred $deferred, $method, $url)
     {
-        $deferred = new Deferred();
-
-        $request = $this->getClient()->request('GET', 'https://github.com/');
+        $request = $this->getClient()->request($method, $url);
         $request->on('response', function ($response) use ($deferred) {
             $deferred->progress(array(
                 'type' => 'response',
@@ -78,7 +87,6 @@ class Plugin extends AbstractPlugin
             $deferred->resolve();
         });
         $request->end();
-        return $deferred->promise();
     }
 
     public function getClient()
@@ -99,7 +107,7 @@ class Plugin extends AbstractPlugin
             return $this->resolver;
         }
 
-        $factory = new Factory();
+        $factory = new ResolverFactory();
 
         $this->resolver = $factory->createCached('8.8.8.8', $this->loop);
 
