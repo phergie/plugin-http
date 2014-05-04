@@ -29,6 +29,24 @@ new \WyriHaximus\Phergie\Plugin\Http\Plugin(array(
 ))
 ```
 
+## Usage
+
+```php
+$deferred = new Deferred();
+$deferred->promise()->then(function () { // Fires when the request has been completed
+    echo 'DONE';
+}, function() { // Fires when an error occurred
+    echo 'FAIL';
+}, function($data) { // Fires when the response is in and from there for every chunk of data. $data = array('type' => 'response|data', 'payload' => 'the data for this event')
+    echo $data['type'];
+});
+$this->emitter->emit('http.request', array(
+    $deferred,
+    'GET',
+    'https://github.com/',
+));
+```
+
 ## Tests
 
 To run the unit test suite:
