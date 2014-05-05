@@ -41,9 +41,11 @@ $deferred->promise()->then(function () { // Fires when the request has been comp
     echo $data['type'];
 });
 $this->emitter->emit('http.request', array(
-    $deferred,
-    'GET',
-    'https://github.com/',
+    $deferred, // Required
+    'GET', // Required
+    'https://github.com/', // Required
+    array('user-agent' => 'PhergieHttp'), // Optional
+    'POSTBODY', // Optional
 ));
 ```
 
