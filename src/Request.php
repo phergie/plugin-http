@@ -30,7 +30,11 @@ class Request
     public function __construct(array $config)
     {
         $this->config = $config;
-
+        
+        if (!isset($this->config['url']) {
+            throw new \InvalidArgumentException('Missing url index');
+        }
+        
         $this->setDefaults();
     }
 
