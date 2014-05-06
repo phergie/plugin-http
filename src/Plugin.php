@@ -65,29 +65,27 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     /**
      *
      *
-     * @param \Phergie\Irc\Event\EventInterface $event
-     * @param \Phergie\Irc\Bot\React\EventQueueInterface $queue
+     * @param Request $request
      */
-    public function makeHttpRequest(Deferred $deferred, $method, $url, $headers = array(), $body = '')
+    public function makeHttpRequest(Request $request)
     {
-        $request = $this->getClient()->request($method, $url, $headers);
-        $request->on('response', function ($response) use ($deferred) {
-            $deferred->progress(array(
-                'type' => 'response',
-                'payload' => $response,
-            ));
-            $response->on('data', function ($data) use ($deferred) {
-                $deferred->progress(array(
-                    'type' => 'data',
-                    'payload' => $data,
-                ));
+        $buffer = '';
+        $request = $this->getClient()->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
+        $request->on('response', function ($response) use ($request, &$buffer) {
+            $request->callResponse($response);
+            $response->on('data', function ($data) use ($request, &$buffer) {
+                $request->callData($response);
+                
+                if ($request->shouldBuffer()) {
+                    $buffer .= $data;
+                }
             });
         });
-        $request->on('end', function () use ($deferred) {
-            $deferred->resolve();
+        $request->on('end', function () use ($request, &$buffer) {
+            $request->callResolve($buffer);
         });
-        $request->on('headers-written', function ($that) use ($body) {
-            $that->write($body);
+        $request->on('headers-written', function ($that) use ($request) {
+            $that->write($request->getBody());
         });
         $request->end();
     }
