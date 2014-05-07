@@ -33,10 +33,17 @@ new \WyriHaximus\Phergie\Plugin\Http\Plugin(array(
 
 ```php
 $this->emitter->emit('http.request', array(new \WyriHaximus\Phergie\Plugin\Http\Request(array(
-    'url' => 'https://github.com/',
-    'resolveCallback' => function($data) {
+    'url' => 'https://github.com/',              // Required
+    'resolveCallback' => function($data) {       // Requered
         // Data recieved do something with it
     },
+    'method' => 'GET',                           // Optional
+    'headers' => array(),                        // Optional
+    'body' => '',                                // Optional
+    'responseCallback' => function() {}          // Optional
+    'dataCallback' => function() {}              // Optional
+    'rejectCallback' => function() {}            // Optional
+    'buffer' => true,                            // Optional
 ))));
 ```
 
