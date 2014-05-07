@@ -70,8 +70,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     public function makeHttpRequest(Request $request)
     {
         $buffer = '';
-        $request = $this->getClient()->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-        $request->on('response', function ($response) use ($request, &$buffer) {
+        $httpRequest = $this->getClient()->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
+        $httpRequest->on('response', function ($response) use ($request, &$buffer) {
             $request->callResponse($response);
             $response->on('data', function ($data) use ($request, &$buffer) {
                 $request->callData($response);
@@ -81,13 +81,13 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                 }
             });
         });
-        $request->on('end', function () use ($request, &$buffer) {
+        $httpRequest->on('end', function () use ($request, &$buffer) {
             $request->callResolve($buffer);
         });
-        $request->on('headers-written', function ($that) use ($request) {
+        $httpRequest->on('headers-written', function ($that) use ($request) {
             $that->write($request->getBody());
         });
-        $request->end();
+        $httpRequest->end();
     }
 
     public function getClient()
