@@ -32,11 +32,11 @@ class Request
     {
         $this->config = $config;
         
-        if (!isset($this->config['url']) {
+        if (!isset($this->config['url'])) {
             throw new \InvalidArgumentException('Missing url');
         }
         
-        if (!isset($this->config['resolveCallback']) {
+        if (!isset($this->config['resolveCallback'])) {
             throw new \InvalidArgumentException('Missing resolve callback');
         }
         
