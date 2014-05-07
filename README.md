@@ -37,13 +37,13 @@ $this->emitter->emit('http.request', array(new \WyriHaximus\Phergie\Plugin\Http\
     'resolveCallback' => function($data) {       // Requered
         // Data recieved do something with it
     },
-    'method' => 'GET',                           // Optional
-    'headers' => array(),                        // Optional
-    'body' => '',                                // Optional
-    'responseCallback' => function() {}          // Optional
-    'dataCallback' => function() {}              // Optional
-    'rejectCallback' => function() {}            // Optional
-    'buffer' => true,                            // Optional
+    'method' => 'GET',                           // Optional, request method
+    'headers' => array(),                        // Optional, headers for the request
+    'body' => '',                                // Optional, request body to write after the headers
+    'responseCallback' => function() {}          // Optional, callback that triggers with the response headers
+    'dataCallback' => function() {}              // Optional, callback that triggers for each chunk of incoming data
+    'rejectCallback' => function() {}            // Optional, callback that gets triggered on connection errors
+    'buffer' => true,                            // Optional, buffer the incoming requested file data and when completed pass it to resolveCallback. Set to false to disable that.
 ))));
 ```
 
