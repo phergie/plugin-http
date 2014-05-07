@@ -74,7 +74,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $httpRequest->on('response', function ($response) use ($request, &$buffer) {
             $request->callResponse($response);
             $response->on('data', function ($data) use ($request, &$buffer) {
-                $request->callData($response);
+                $request->callData($data);
                 
                 if ($request->shouldBuffer()) {
                     $buffer .= $data;
