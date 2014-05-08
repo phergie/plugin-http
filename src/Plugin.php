@@ -87,6 +87,9 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $httpRequest->on('headers-written', function ($that) use ($request) {
             $that->write($request->getBody());
         });
+        $httpRequest->on('error', function ($error) use ($request) {
+            $request->callReject($error);
+        });
         $httpRequest->end();
     }
 
