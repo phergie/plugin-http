@@ -11,13 +11,11 @@
 namespace WyriHaximus\Phergie\Plugin\Http;
 
 use Phergie\Irc\Bot\React\AbstractPlugin;
-use Phergie\Irc\Bot\React\EventQueueInterface;
-use Phergie\Irc\Event\EventInterface;
 use React\EventLoop\LoopInterface;
 use Phergie\Irc\Client\React\LoopAwareInterface;
 use React\HttpClient\Client as HttpClient;
 use React\HttpClient\Factory as HttpClientFactory;
-use React\Promise\Deferred;
+use React\HttpClient\Response;
 use React\Dns\Resolver\Factory as ResolverFactory;
 use React\Dns\Resolver\Resolver;
 
@@ -70,9 +68,12 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     public function makeHttpRequest(Request $request)
     {
         $buffer = '';
+        $httpReponse = null;
         $httpRequest = $this->getClient()->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-        $httpRequest->on('response', function ($response) use ($request, &$buffer) {
-            $request->callResponse($response);
+        $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpReponse) {
+            $request->callResponse($response->getHeaders(), $response->getCode());
+            $httpReponse = $response;
+
             $response->on('data', function ($data) use ($request, &$buffer) {
                 $request->callData($data);
                 
@@ -81,8 +82,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                 }
             });
         });
-        $httpRequest->on('end', function () use ($request, &$buffer) {
-            $request->callResolve($buffer);
+        $httpRequest->on('end', function () use ($request, &$buffer, &$httpReponse) {
+            $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
         });
         $httpRequest->on('headers-written', function ($that) use ($request) {
             $that->write($request->getBody());

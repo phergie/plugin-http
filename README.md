@@ -33,17 +33,17 @@ new \WyriHaximus\Phergie\Plugin\Http\Plugin(array(
 
 ```php
 $this->emitter->emit('http.request', array(new \WyriHaximus\Phergie\Plugin\Http\Request(array(
-    'url' => 'https://github.com/',                                         // Required
-    'resolveCallback' => function($buffer, $headers, $code) {               // Requered
+    'url' => 'https://github.com/',                     // Required
+    'resolveCallback' => function($buffer, $headers, $code) { // Requered
         // Data recieved do something with it
     },
-    'method' => 'GET',                                                      // Optional, request method
-    'headers' => array(),                                                   // Optional, headers for the request
-    'body' => '',                                                           // Optional, request body to write after the headers
-    'responseCallback' => function(React\HttpClient\Response $response) {}  // Optional, callback that triggers with the response headers
-    'dataCallback' => function($data) {}                                    // Optional, callback that triggers for each chunk of incoming data
-    'rejectCallback' => function($error) {}                                 // Optional, callback that gets triggered on connection errors
-    'buffer' => true,                                                       // Optional, buffer the incoming requested file data and when completed pass it to resolveCallback. Set to false to disable that.
+    'method' => 'GET',                                  // Optional, request method
+    'headers' => array(),                               // Optional, headers for the request
+    'body' => '',                                       // Optional, request body to write after the headers
+    'responseCallback' => function($headers, $code) {}  // Optional, callback that triggers with the response headers
+    'dataCallback' => function($data) {}                // Optional, callback that triggers for each chunk of incoming data
+    'rejectCallback' => function($error) {}             // Optional, callback that gets triggered on connection errors
+    'buffer' => true,                                   // Optional, buffer the incoming requested file data and when completed pass it to resolveCallback. Set to false to disable that.
 ))));
 ```
 

@@ -93,20 +93,20 @@ class Request
         return $this->config['body'];
     }
     
-    public function callResolve($payload = null) {
-        return $this->config['resolveCallback']($payload);
+    public function callResolve($buffer, $headers, $code) {
+        return $this->config['resolveCallback']($buffer, $headers, $code);
     }
     
-    public function callResponse($payload = null) {
-        return $this->config['responseCallback']($payload);
+    public function callResponse($headers, $code) {
+        return $this->config['responseCallback']($headers, $code);
     }
     
-    public function callData($payload = null) {
-        return $this->config['dataCallback']($payload);
+    public function callData($data) {
+        return $this->config['dataCallback']($data);
     }
     
-    public function callReject($payload = null) {
-        return $this->config['rejectCallback']($payload);
+    public function callReject($error) {
+        return $this->config['rejectCallback']($error);
     }
     
     public function shouldBuffer() {
