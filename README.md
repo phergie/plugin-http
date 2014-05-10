@@ -47,6 +47,8 @@ $this->emitter->emit('http.request', array(new \WyriHaximus\Phergie\Plugin\Http\
 ))));
 ```
 
+A note about `resolveCallback` and `rejectCallback`. `rejectCallback` will only fire on a socket error. So `resolveCallback` will be called no matter what [`HTTP status code`](http://en.wikipedia.org/wiki/List_of_HTTP_status_codes) as the request has been successful on a connection level. Choosing the appropriate response to a status code is up to the event callee.
+
 ## Tests
 
 To run the unit test suite:
