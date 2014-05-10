@@ -16,7 +16,6 @@ use Phergie\Irc\Client\React\LoopAwareInterface;
 use React\HttpClient\Client as HttpClient;
 use React\HttpClient\Factory as HttpClientFactory;
 use React\HttpClient\Response;
-use React\Dns\Resolver\Factory as ResolverFactory;
 use React\Dns\Resolver\Resolver;
 
 /**
@@ -30,6 +29,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     protected $resolver;
     protected $client;
 
+    protected $dnsResolverEvent = 'dns.resolver';
+
     /**
      * Accepts plugin configuration.
      *
@@ -41,7 +42,9 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function __construct(array $config = array())
     {
-
+        if (isset($config['dnsResolverEvent'])) {
+            $this->dnsResolverEvent = $config['dnsResolverEvent'];
+        }
     }
 
     public function setLoop(LoopInterface $loop) {
@@ -106,15 +109,18 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         return $this->client;
     }
 
+    /**
+     * @param Factory $factory
+     *
+     * @return Resolver
+     */
     public function getResolver()
     {
         if ($this->resolver instanceof Resolver) {
             return $this->resolver;
         }
 
-        $factory = new ResolverFactory();
-
-        $this->resolver = $factory->createCached('8.8.8.8', $this->loop);
+        $this->resolver = $this->emitter->emit($this->dnsResolverEvent);
 
         return $this->resolver;
     }

@@ -19,12 +19,18 @@ The recommended method of installation is [through composer](http://getcomposer.
 See Phergie documentation for more information on
 [installing and enabling plugins](https://github.com/phergie/phergie-irc-bot-react/wiki/Usage#plugins).
 
+## Requirements
+
+The HTTP plugin requires the [DNS plugin](https://github.com/WyriHaximus/PhergieDns) to be setup for DNS resolving.
+
 ## Configuration
 
 ```php
 new \WyriHaximus\Phergie\Plugin\Http\Plugin(array(
 
+    // All configuration is optional
 
+    'dnsResolverEvent' => 'dns.resolver', // Event for retrieving the DNS resolver
 
 ))
 ```
