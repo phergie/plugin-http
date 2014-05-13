@@ -51,6 +51,14 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $this->loop = $loop;
     }
 
+    public function setResolver(Resolver $resolver) {
+        $this->resolver = $resolver;
+    }
+
+    public function setClient(HttpClient $client) {
+        $this->client = $client;
+    }
+
     /**
      *
      *
@@ -70,43 +78,47 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function makeHttpRequest(Request $request)
     {
-        $buffer = '';
-        $httpReponse = null;
-        $httpRequest = $this->getClient()->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-        $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpReponse) {
-            $request->callResponse($response->getHeaders(), $response->getCode());
-            $httpReponse = $response;
+        $this->getClient(function($client) use ($request) {
+            $buffer = '';
+            $httpReponse = null;
+            $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
+            $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpReponse) {
+                $request->callResponse($response->getHeaders(), $response->getCode());
+                $httpReponse = $response;
+                $response->on('data', function ($data) use ($request, &$buffer) {
+                    $request->callData($data);
 
-            $response->on('data', function ($data) use ($request, &$buffer) {
-                $request->callData($data);
-                
-                if ($request->shouldBuffer()) {
-                    $buffer .= $data;
-                }
+                    if ($request->shouldBuffer()) {
+                        $buffer .= $data;
+                    }
+                });
             });
+            $httpRequest->on('end', function () use ($request, &$buffer, &$httpReponse) {
+                $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
+            });
+            $httpRequest->on('headers-written', function ($that) use ($request) {
+                $that->write($request->getBody());
+            });
+            $httpRequest->on('error', function ($error) use ($request) {
+                $request->callReject($error);
+            });
+            $httpRequest->end();
         });
-        $httpRequest->on('end', function () use ($request, &$buffer, &$httpReponse) {
-            $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
-        });
-        $httpRequest->on('headers-written', function ($that) use ($request) {
-            $that->write($request->getBody());
-        });
-        $httpRequest->on('error', function ($error) use ($request) {
-            $request->callReject($error);
-        });
-        $httpRequest->end();
     }
 
-    public function getClient()
+    public function getClient($callback)
     {
         if ($this->client instanceof HttpClient) {
-            return $this->client;
+            $callback($this->client);
         }
 
-        $factory = new HttpClientFactory();
-        $this->client = $factory->create($this->loop, $this->getResolver());
-
-        return $this->client;
+        $that = $this;
+        $this->getResolver(function($resolver) use ($that, $callback) {
+            $factory = new HttpClientFactory();
+            $client = $factory->create($that->loop, $resolver);
+            $that->setClient($client);
+            $callback($client);
+        });
     }
 
     /**
@@ -114,14 +126,16 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      *
      * @return Resolver
      */
-    public function getResolver()
+    public function getResolver($callback)
     {
         if ($this->resolver instanceof Resolver) {
-            return $this->resolver;
+            $callback($this->resolver);
         }
 
-        $this->resolver = $this->emitter->emit($this->dnsResolverEvent);
-
-        return $this->resolver;
+        $that = $this;
+        $this->emitter->emit($this->dnsResolverEvent, array(function($resolver) use ($that, $callback) {
+            $that->setResolver($resolver);
+            $callback($resolver);
+        }));
     }
 }
