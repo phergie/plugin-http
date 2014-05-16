@@ -94,7 +94,11 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                 });
             });
             $httpRequest->on('end', function () use ($request, &$buffer, &$httpReponse) {
-                $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
+                if ($httpReponse instanceof Response) {
+                    $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
+                } else {
+                    $request->callReject(new Exception('Never received response'));
+                }
             });
             $httpRequest->on('headers-written', function ($that) use ($request) {
                 $that->write($request->getBody());
