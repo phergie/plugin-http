@@ -114,6 +114,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     {
         if ($this->client instanceof HttpClient) {
             $callback($this->client);
+            return;
         }
 
         $that = $this;
@@ -134,6 +135,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     {
         if ($this->resolver instanceof Resolver) {
             $callback($this->resolver);
+            return;
         }
 
         $that = $this;
