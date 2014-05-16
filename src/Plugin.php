@@ -113,12 +113,17 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     public function getClient($callback)
     {
         if ($this->client instanceof HttpClient) {
+            $this->logger->debug('Existing HttpClient found using it');
             $callback($this->client);
             return;
         }
 
+        $this->logger->debug('Creating new HttpClient');
+
+        $logger = $this->logger;
         $that = $this;
-        $this->getResolver(function($resolver) use ($that, $callback) {
+        $this->getResolver(function($resolver) use ($that, $callback, $logger) {
+            $logger->debug('Requesting DNS Resolver');
             $factory = new HttpClientFactory();
             $client = $factory->create($that->loop, $resolver);
             $that->setClient($client);
@@ -138,8 +143,12 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
             return;
         }
 
+        $this->logger->debug('Requesting DNS Resolver');
+
+        $logger = $this->logger;
         $that = $this;
-        $this->emitter->emit($this->dnsResolverEvent, array(function($resolver) use ($that, $callback) {
+        $this->emitter->emit($this->dnsResolverEvent, array(function($resolver) use ($that, $callback, $logger) {
+            $logger->debug('DNS Resolver received');
             $that->setResolver($resolver);
             $callback($resolver);
         }));
