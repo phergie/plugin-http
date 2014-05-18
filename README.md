@@ -26,13 +26,23 @@ The HTTP plugin requires the [DNS plugin](https://github.com/WyriHaximus/Phergie
 ## Configuration
 
 ```php
-new \WyriHaximus\Phergie\Plugin\Http\Plugin(array(
+return array(
 
-    // All configuration is optional
+    'plugins' => array(
 
-    'dnsResolverEvent' => 'dns.resolver', // Event for retrieving the DNS resolver
+        // dependency
+        new \WyriHaximus\Phergie\Plugin\Dns\Plugin,
 
-))
+        new \WyriHaximus\Phergie\Plugin\Http\Plugin(array(
+
+            // All configuration is optional
+
+            'dnsResolverEvent' => 'dns.resolver', // Event for retrieving the DNS resolver
+
+        )),
+
+    )
+);
 ```
 
 ## Usage
