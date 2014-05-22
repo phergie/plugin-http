@@ -139,4 +139,82 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         ));
         $this->assertSame(true, $request->shouldBuffer());
     }
+
+    public function testCallResolve()
+    {
+        $callbackFired = false;
+        $that = $this;
+        $callback = function($buffer, $headers, $code) use (&$callbackFired, $that) {
+            $that->assertSame('bar:foo', $buffer);
+            $that->assertSame(array('bar' => 'foo'), $headers);
+            $that->assertSame(123, $code);
+            $callbackFired = true;
+        };
+
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => $callback,
+        ));
+
+        $request->callResolve('bar:foo', array('bar' => 'foo'), 123);
+        $this->assertTrue($callbackFired);
+    }
+
+    public function testCallReject()
+    {
+        $callbackFired = false;
+        $that = $this;
+        $callback = function($error) use (&$callbackFired, $that) {
+            $that->assertSame('bar:foo', $error);
+            $callbackFired = true;
+        };
+
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'rejectCallback' => $callback,
+        ));
+
+        $request->callReject('bar:foo');
+        $this->assertTrue($callbackFired);
+    }
+
+    public function testCallResponse()
+    {
+        $callbackFired = false;
+        $that = $this;
+        $callback = function($headers, $code) use (&$callbackFired, $that) {
+            $that->assertSame(array('bar' => 'foo'), $headers);
+            $that->assertSame(123, $code);
+            $callbackFired = true;
+        };
+
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'responseCallback' => $callback,
+        ));
+
+        $request->callResponse(array('bar' => 'foo'), 123);
+        $this->assertTrue($callbackFired);
+    }
+
+    public function testCallData()
+    {
+        $callbackFired = false;
+        $that = $this;
+        $callback = function($data) use (&$callbackFired, $that) {
+            $that->assertSame('bar:foo', $data);
+            $callbackFired = true;
+        };
+
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'dataCallback' => $callback,
+        ));
+
+        $request->callData('bar:foo');
+        $this->assertTrue($callbackFired);
+    }
 }
