@@ -105,4 +105,34 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         ));
         $this->assertSame('foo:bar', $request->getBody());
     }
+
+    public function testShouldBufferFalse()
+    {
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'buffer' => false,
+        ));
+        $this->assertSame(false, $request->shouldBuffer());
+    }
+
+    public function testShouldBufferTrue()
+    {
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'buffer' => true,
+        ));
+        $this->assertSame(true, $request->shouldBuffer());
+    }
+
+    public function testShouldBufferOne()
+    {
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'buffer' => 'one',
+        ));
+        $this->assertSame(true, $request->shouldBuffer());
+    }
 }
