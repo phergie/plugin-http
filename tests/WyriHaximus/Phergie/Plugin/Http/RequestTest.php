@@ -36,6 +36,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'rejectCallback' => function() {},
             'buffer' => true,
         ), $request->getConfig());
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame('http://wyrihaximus.net/', $request->getUrl());
+        $this->assertSame(array(), $request->getHeaders());
+        $this->assertSame('', $request->getBody());
     }
 
     /**
