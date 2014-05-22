@@ -62,4 +62,47 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'url' => 'http://wyrihaximus.net/',
         ));
     }
+
+    public function testGetUrl()
+    {
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+        ));
+        $this->assertSame('http://wyrihaximus.net/', $request->getUrl());
+    }
+
+    public function testGetMethod()
+    {
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'method' => 'POST',
+        ));
+        $this->assertSame('POST', $request->getMethod());
+    }
+
+    public function testGetHeaders()
+    {
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'headers' => array(
+                'foo' => 'bar',
+            ),
+        ));
+        $this->assertSame(array(
+            'foo' => 'bar',
+        ), $request->getHeaders());
+    }
+
+    public function testGetBody()
+    {
+        $request = new Request(array(
+            'url' => 'http://wyrihaximus.net/',
+            'resolveCallback' => function() {},
+            'body' => 'foo:bar',
+        ));
+        $this->assertSame('foo:bar', $request->getBody());
+    }
 }
