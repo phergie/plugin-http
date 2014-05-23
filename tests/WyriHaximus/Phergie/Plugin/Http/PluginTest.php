@@ -28,4 +28,12 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             'http.request' => 'makeHttpRequest',
         ), $subscribedEvents);
     }
+
+    /**
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testEmptyMakeHttpRequest() {
+        $plugin = new Plugin();
+        $plugin->makeHttpRequest();
+    }
 }
