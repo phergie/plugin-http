@@ -108,7 +108,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                     $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
                 } else {
                     $that->logDebug('[' . $requestId . ']Request done but no response received');
-                    $request->callReject(new Exception('Never received response'));
+                    $request->callReject(new \Exception('Never received response'));
                 }
             });
             $httpRequest->on('headers-written', function ($connection) use ($request, $that, $requestId) {
