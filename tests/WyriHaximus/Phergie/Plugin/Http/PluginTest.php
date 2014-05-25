@@ -29,6 +29,21 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         ), $subscribedEvents);
     }
 
+    public function testLogDebug() {
+        $logger = $this->getMock('Monolog\Logger', array(
+            'debug',
+        ), array(
+            'test',
+        ));
+        $logger->expects($this->once())
+            ->method('debug')
+            ->with('[Http]foo:bar');
+
+        $plugin = new Plugin();
+        $plugin->setLogger($logger);
+        $plugin->logDebug('foo:bar');
+    }
+
     /**
      * @expectedException PHPUnit_Framework_Error
      */
