@@ -127,7 +127,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     public function getClient($callback)
     {
         if ($this->client instanceof HttpClient) {
-            $this->logDebug('Existing HttpClient found using it');
+            $this->logDebug('Existing HttpClient found, using it');
             $callback($this->client);
             return;
         }
