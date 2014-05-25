@@ -44,6 +44,28 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin->logDebug('foo:bar');
     }
 
+    public function testGetClient() {
+        $httpClient = $this->getMock('React\HttpClient\Client', array(), array(
+            $this->getMock('React\EventLoop\LoopInterface'),
+            $this->getMock('React\SocketClient\ConnectorInterface'),
+            $this->getMock('React\SocketClient\ConnectorInterface'),
+        ));
+
+        $callbackFired = false;
+        $that = $this;
+        $callback = function($client) use (&$callbackFired, $that, $httpClient) {
+            $that->assertSame($httpClient, $client);
+            $callbackFired = true;
+        };
+
+        $plugin = new Plugin();
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->setClient($httpClient);
+        $plugin->getClient($callback);
+
+        $this->assertTrue($callbackFired);
+    }
+
     /**
      * @expectedException PHPUnit_Framework_Error
      */
