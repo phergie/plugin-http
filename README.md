@@ -37,7 +37,7 @@ return array(
 
             // All configuration is optional
 
-            'dnsResolverEvent' => 'dns.resolver', // Event for retrieving the DNS resolver
+            'dnsResolverEvent' => 'dns.resolver', // Event for retrieving the DNS resolver, defaults to 'dns.resolver'
 
         )),
 
