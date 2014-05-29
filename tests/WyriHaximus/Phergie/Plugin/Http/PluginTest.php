@@ -83,8 +83,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(
                 function ($eventName, $callback) use ($that) {
                     $callback[0]($that->getMock('React\Dns\Resolver\Resolver', array(), array(
-                        $this->getMock('React\Dns\Query\ExecutorInterface'),
-                        $this->getMock('React\Dns\Query\ExecutorInterface'),
+                        $that->getMock('React\Dns\Query\ExecutorInterface'),
+                        $that->getMock('React\Dns\Query\ExecutorInterface'),
                     )));
                 }
             ));
@@ -121,8 +121,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(
                 function ($eventName, $callback) use ($that) {
                     $callback[0]($that->getMock('React\Dns\Resolver\Resolver', array(), array(
-                        $this->getMock('React\Dns\Query\ExecutorInterface'),
-                        $this->getMock('React\Dns\Query\ExecutorInterface'),
+                        $that->getMock('React\Dns\Query\ExecutorInterface'),
+                        $that->getMock('React\Dns\Query\ExecutorInterface'),
                     )));
                 }
             ));
