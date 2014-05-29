@@ -104,6 +104,51 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($callbackFired);
     }
 
+    public function testGetResolver() {
+        $that = $this;
+
+        $emitter = $this->getMock('Evenement\EventEmitterInterface', array(
+            'on',
+            'once',
+            'removeListener',
+            'removeAllListeners',
+            'listeners',
+            'emit',
+        ));
+        $emitter->expects($this->once())
+            ->method('emit')
+            ->with('dns.resolver')
+            ->will($this->returnCallback(
+                function ($eventName, $callback) use ($that) {
+                    $callback[0]($that->getMock('React\Dns\Resolver\Resolver', array(), array(
+                        $this->getMock('React\Dns\Query\ExecutorInterface'),
+                        $this->getMock('React\Dns\Query\ExecutorInterface'),
+                    )));
+                }
+            ));
+
+        $callbackFiredA = false;
+        $callbackA = function($resolver) use (&$callbackFiredA, $that) {
+            $that->assertInstanceOf('React\Dns\Resolver\Resolver', $resolver);
+            $callbackFiredA = true;
+        };
+        $callbackFiredB = false;
+        $callbackB = function($resolver) use (&$callbackFiredB, $that) {
+            $that->assertInstanceOf('React\Dns\Resolver\Resolver', $resolver);
+            $callbackFiredB = true;
+        };
+
+        $plugin = new Plugin();
+        $plugin->setLoop($this->getMock('React\EventLoop\LoopInterface'));
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->setEventEmitter($emitter);
+        $plugin->getResolver($callbackA);
+        $plugin->getResolver($callbackB);
+
+        $this->assertTrue($callbackFiredA);
+        $this->assertTrue($callbackFiredB);
+    }
+
     /**
      * @expectedException PHPUnit_Framework_Error
      */
