@@ -25,17 +25,26 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'url' => 'http://wyrihaximus.net/',
             'resolveCallback' => function() {},
         ));
-        $this->assertEquals(array(
-            'url' => 'http://wyrihaximus.net/',
-            'resolveCallback' => function() {},
-            'method' => 'GET',
-            'headers' => array(),
-            'body' => '',
-            'responseCallback' => function() {},
-            'dataCallback' => function() {},
-            'rejectCallback' => function() {},
-            'buffer' => true,
-        ), $request->getConfig());
+        $config = $request->getConfig();
+        $this->assertSame(9, count($config));
+        $this->assertTrue(isset($config['url']));
+        $this->assertSame('http://wyrihaximus.net/', $config['url']);
+        $this->assertTrue(isset($config['resolveCallback']));
+        $this->assertInternalType('callable', $config['resolveCallback']);
+        $this->assertTrue(isset($config['method']));
+        $this->assertSame('GET', $config['method']);
+        $this->assertTrue(isset($config['headers']));
+        $this->assertSame(array(), $config['headers']);
+        $this->assertTrue(isset($config['body']));
+        $this->assertSame('', $config['body']);
+        $this->assertTrue(isset($config['responseCallback']));
+        $this->assertInternalType('callable', $config['responseCallback']);
+        $this->assertTrue(isset($config['dataCallback']));
+        $this->assertInternalType('callable', $config['dataCallback']);
+        $this->assertTrue(isset($config['rejectCallback']));
+        $this->assertInternalType('callable', $config['rejectCallback']);
+        $this->assertTrue(isset($config['buffer']));
+        $this->assertSame(true, $config['buffer']);
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame('http://wyrihaximus.net/', $request->getUrl());
         $this->assertSame(array(), $request->getHeaders());
