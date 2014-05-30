@@ -156,4 +156,40 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin = new Plugin();
         $plugin->makeHttpRequest();
     }
+
+    public function testMakeHttpRequest() {
+        $request = new Request(array(
+            'url' => 'http://example.com/',
+            'resolveCallback' => function() {},
+        ));
+
+        $httpRequest = $this->getMock('React\HttpClient\Request', array(
+            'on',
+            'end',
+        ), array(
+            $this->getMock('React\EventLoop\LoopInterface'),
+            $this->getMock('React\SocketClient\ConnectorInterface'),
+            $this->getMock('React\HttpClient\RequestData', array(), array(
+                '',
+                '',
+            )),
+        ));
+        $httpClient = $this->getMock('React\HttpClient\Client', array(
+            'request',
+        ), array(
+            $this->getMock('React\EventLoop\LoopInterface'),
+            $this->getMock('React\SocketClient\ConnectorInterface'),
+            $this->getMock('React\SocketClient\ConnectorInterface'),
+        ));
+
+        $httpClient->expects($this->once())
+            ->method('request')
+            ->with('GET', 'http://example.com/')
+            ->willReturn($httpRequest);
+
+        $plugin = new Plugin();
+        $plugin->setClient($httpClient);
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->makeHttpRequest($request);
+    }
 }
