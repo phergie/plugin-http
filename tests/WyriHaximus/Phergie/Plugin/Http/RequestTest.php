@@ -22,13 +22,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testDefaultConfig()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
         ));
         $config = $request->getConfig();
         $this->assertSame(9, count($config));
         $this->assertTrue(isset($config['url']));
-        $this->assertSame('http://wyrihaximus.net/', $config['url']);
+        $this->assertSame('http://example.com/', $config['url']);
         $this->assertTrue(isset($config['resolveCallback']));
         $this->assertInternalType('callable', $config['resolveCallback']);
         $this->assertTrue(isset($config['method']));
@@ -46,7 +46,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($config['buffer']));
         $this->assertSame(true, $config['buffer']);
         $this->assertSame('GET', $request->getMethod());
-        $this->assertSame('http://wyrihaximus.net/', $request->getUrl());
+        $this->assertSame('http://example.com/', $request->getUrl());
         $this->assertSame(array(), $request->getHeaders());
         $this->assertSame('', $request->getBody());
     }
@@ -72,23 +72,23 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testNoResolveCallbackConfig()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
         ));
     }
 
     public function testGetUrl()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
         ));
-        $this->assertSame('http://wyrihaximus.net/', $request->getUrl());
+        $this->assertSame('http://example.com/', $request->getUrl());
     }
 
     public function testGetMethod()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'method' => 'POST',
         ));
@@ -98,7 +98,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testGetHeaders()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'headers' => array(
                 'foo' => 'bar',
@@ -112,7 +112,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testGetBody()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'body' => 'foo:bar',
         ));
@@ -122,7 +122,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testShouldBufferFalse()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'buffer' => false,
         ));
@@ -132,7 +132,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testShouldBufferTrue()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'buffer' => true,
         ));
@@ -142,7 +142,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testShouldBufferOne()
     {
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'buffer' => 'one',
         ));
@@ -161,7 +161,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         };
 
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => $callback,
         ));
 
@@ -179,7 +179,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         };
 
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'rejectCallback' => $callback,
         ));
@@ -199,7 +199,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         };
 
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'responseCallback' => $callback,
         ));
@@ -218,7 +218,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         };
 
         $request = new Request(array(
-            'url' => 'http://wyrihaximus.net/',
+            'url' => 'http://example.com/',
             'resolveCallback' => function() {},
             'dataCallback' => $callback,
         ));
