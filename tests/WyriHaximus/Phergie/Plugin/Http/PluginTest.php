@@ -26,6 +26,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $subscribedEvents);
         $this->assertSame(array(
             'http.request' => 'makeHttpRequest',
+            //'http.streamingRequest' => 'makeStreamingHttpRequest',
         ), $subscribedEvents);
     }
 

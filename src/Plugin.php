@@ -68,6 +68,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     {
         return array(
             'http.request' => 'makeHttpRequest',
+            //'http.streamingRequest' => 'makeStreamingHttpRequest',
         );
     }
 
