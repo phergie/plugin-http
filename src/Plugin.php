@@ -91,38 +91,55 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
             $httpReponse = null;
             $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
             $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpReponse, $that, $requestId) {
-                $that->logDebug('[' . $requestId . ']Response received');
-                $request->callResponse($response->getHeaders(), $response->getCode());
-                $httpReponse = $response;
-                $response->on('data', function ($data) use ($request, &$buffer, $that, $requestId) {
-                    $that->logDebug('[' . $requestId . ']Data received');
-                    $request->callData($data);
-
-                    if ($request->shouldBuffer()) {
-                        $buffer .= $data;
-                    }
-                });
+                $that->oResponse($response, $request, $buffer, $httpReponse, $requestId);
             });
             $httpRequest->on('end', function () use ($request, &$buffer, &$httpReponse, $that, $requestId) {
-                if ($httpReponse instanceof Response) {
-                    $that->logDebug('[' . $requestId . ']Request done');
-                    $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
-                } else {
-                    $that->logDebug('[' . $requestId . ']Request done but no response received');
-                    $request->callReject(new \Exception('Never received response'));
-                }
+                $that->onEnd($request, $buffer, $httpReponse, $requestId);
             });
             $httpRequest->on('headers-written', function ($connection) use ($request, $that, $requestId) {
-                $that->logDebug('[' . $requestId . ']Writing body');
-                $connection->write($request->getBody());
+                $that->onHeadersWritten($connection, $request, $requestId);
             });
             $httpRequest->on('error', function ($error) use ($request, $that, $requestId) {
-                $that->logDebug('[' . $requestId . ']Error executing request: ' . (string)$error);
-                $request->callReject($error);
+                $that->onError($error, $request, $requestId);
             });
             $that->logDebug('[' . $requestId . ']Sending request');
             $httpRequest->end();
         });
+    }
+
+    public function oResponse(Response $response, $request, &$buffer, &$httpReponse, $requestId) {
+        $this->logDebug('[' . $requestId . ']Response received');
+        $request->callResponse($response->getHeaders(), $response->getCode());
+        $httpReponse = $response;
+        $that = $this;
+        $response->on('data', function ($data) use ($request, &$buffer, $that, $requestId) {
+            $that->logDebug('[' . $requestId . ']Data received');
+            $request->callData($data);
+
+            if ($request->shouldBuffer()) {
+                $buffer .= $data;
+            }
+        });
+    }
+
+    public function onEnd($request, &$buffer, &$httpReponse, $requestId) {
+        if ($httpReponse instanceof Response) {
+            $this->logDebug('[' . $requestId . ']Request done');
+            $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
+        } else {
+            $this->logDebug('[' . $requestId . ']Request done but no response received');
+            $request->callReject(new \Exception('Never received response'));
+        }
+    }
+
+    public function onHeadersWritten($connection, $request, $requestId) {
+        $this->logDebug('[' . $requestId . ']Writing body');
+        $connection->write($request->getBody());
+    }
+
+    public function onError($error, $request, $requestId) {
+        $this->logDebug('[' . $requestId . ']Error executing request: ' . (string)$error);
+        $request->callReject($error);
     }
 
     public function getClient($callback)
