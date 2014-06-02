@@ -26,7 +26,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'resolveCallback' => function() {},
         ));
         $config = $request->getConfig();
-        $this->assertSame(9, count($config));
+        $this->assertSame(8, count($config));
         $this->assertTrue(isset($config['url']));
         $this->assertSame('http://example.com/', $config['url']);
         $this->assertTrue(isset($config['resolveCallback']));
@@ -43,8 +43,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('callable', $config['dataCallback']);
         $this->assertTrue(isset($config['rejectCallback']));
         $this->assertInternalType('callable', $config['rejectCallback']);
-        $this->assertTrue(isset($config['buffer']));
-        $this->assertSame(true, $config['buffer']);
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame('http://example.com/', $request->getUrl());
         $this->assertSame(array(), $request->getHeaders());
@@ -117,36 +115,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'body' => 'foo:bar',
         ));
         $this->assertSame('foo:bar', $request->getBody());
-    }
-
-    public function testShouldBufferFalse()
-    {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'buffer' => false,
-        ));
-        $this->assertSame(false, $request->shouldBuffer());
-    }
-
-    public function testShouldBufferTrue()
-    {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'buffer' => true,
-        ));
-        $this->assertSame(true, $request->shouldBuffer());
-    }
-
-    public function testShouldBufferOne()
-    {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'buffer' => 'one',
-        ));
-        $this->assertSame(true, $request->shouldBuffer());
     }
 
     public function testCallResolve()
