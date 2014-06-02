@@ -243,4 +243,60 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($callbackFired);
     }
+
+    public function testOnResponseStream() {
+        $response = $this->getMock('React\HttpClient\Response', array(
+            'on',
+        ), array(
+            $this->getMock('React\EventLoop\LoopInterface'),
+            $this->getMock('React\Stream\Stream', array(), array(
+                $this->getMock('React\EventLoop\LoopInterface'),
+                $this->getMock('React\EventLoop\LoopInterface'),
+            )),
+            '',
+            '',
+            200,
+            '',
+            array(
+                'foo' => 'bar',
+            ),
+        ));
+
+        $response->expects($this->once())
+            ->method('on')
+            ->with('data', $this->isType('callable'))
+            ->willReturnCallback(function($void, $callback) {
+                $callback('abc');
+                return $callback;
+            });
+
+        $that = $this;
+        $buffer = 'foo';
+        $httpReponse = 'bar';
+        $callbackFiredA = false;
+        $callbackFiredB = false;
+
+        $request = new Request(array(
+            'url' => 'http://example.com/',
+            'resolveCallback' => function() {},
+            'responseCallback' => function($headers, $code) use (&$callbackFiredA, $that) {
+                $that->assertSame(array(
+                    'foo' => 'bar',
+                ), $headers);
+                $that->assertSame(200, $code);
+                $callbackFiredA = true;
+            },
+            'dataCallback' => function($data) use (&$callbackFiredB, $that) {
+                $that->assertSame('abc', $data);
+                $callbackFiredB = true;
+            },
+        ));
+
+        $plugin = new Plugin();
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->onResponseStream($response, $request, $buffer, $httpReponse, 123);
+
+        $this->assertTrue($callbackFiredA);
+        $this->assertTrue($callbackFiredB);
+    }
 }
