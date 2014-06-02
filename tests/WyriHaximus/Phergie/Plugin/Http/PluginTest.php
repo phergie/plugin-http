@@ -319,4 +319,25 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->onHeadersWritten($connection, $request, 123);
     }
+
+    public function testOnError() {
+        $that = $this;
+        $callbackFired = false;
+
+        $request = new Request(array(
+            'url' => 'http://example.com/',
+            'resolveCallback' => function() {},
+            'rejectCallback' => function($error) use (&$callbackFired, $that) {
+                $that->assertInstanceOf('\Exception', $error);
+                $that->assertSame('abc', $error->getMessage());
+                $callbackFired = true;
+            },
+        ));
+
+        $plugin = new Plugin();
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->onError(new \Exception('abc'), $request, 123);
+
+        $this->assertTrue($callbackFired);
+    }
 }
