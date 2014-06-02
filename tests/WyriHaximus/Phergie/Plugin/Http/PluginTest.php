@@ -299,4 +299,24 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($callbackFiredA);
         $this->assertTrue($callbackFiredB);
     }
+
+    public function testOnHeadersWritten() {
+        $connection = $this->getMock('React\SocketClient\ConnectorInterface', array(
+            'create',
+            'write',
+        ));
+        $connection->expects($this->once())
+            ->method('write')
+            ->with('foo:bar');
+
+        $request = new Request(array(
+            'url' => 'http://example.com/',
+            'resolveCallback' => function() {},
+            'body' => 'foo:bar',
+        ));
+
+        $plugin = new Plugin();
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->onHeadersWritten($connection, $request, 123);
+    }
 }
