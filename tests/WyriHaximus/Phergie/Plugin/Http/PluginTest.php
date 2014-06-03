@@ -300,6 +300,70 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($callbackFiredB);
     }
 
+    public function testOnEndResolve() {
+        $that = $this;
+        $buffer = 'foo';
+        $callbackFired = false;
+
+        $request = new Request(array(
+            'url' => 'http://example.com/',
+            'resolveCallback' => function($buffer, $headers, $code) use (&$callbackFired, $that) {
+                $that->assertSame('foo', $buffer);
+                $that->assertSame(array(
+                    'foo' => 'bar',
+                ), $headers);
+                $that->assertSame(200, $code);
+                $callbackFired = true;
+            },
+        ));
+
+        $response = $this->getMock('React\HttpClient\Response', array(
+            'on',
+        ), array(
+                $this->getMock('React\EventLoop\LoopInterface'),
+                $this->getMock('React\Stream\Stream', array(), array(
+                $this->getMock('React\EventLoop\LoopInterface'),
+                $this->getMock('React\EventLoop\LoopInterface'),
+            )),
+            '',
+            '',
+            200,
+            '',
+            array(
+                'foo' => 'bar',
+            ),
+        ));
+
+        $plugin = new Plugin();
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->onEnd($request, $buffer, $response, 123);
+
+        $this->assertTrue($callbackFired);
+    }
+
+    public function testOnEndReject() {
+        $that = $this;
+        $buffer = 'foo';
+        $response = 'error';
+        $callbackFired = false;
+
+        $request = new Request(array(
+            'url' => 'http://example.com/',
+            'resolveCallback' => function() {},
+            'rejectCallback' => function($error) use (&$callbackFired, $that) {
+                $that->assertInstanceOf('\Exception', $error);
+                $that->assertSame('Never received response', $error->getMessage());
+                $callbackFired = true;
+            },
+        ));
+
+        $plugin = new Plugin();
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->onEnd($request, $buffer, $response, 123);
+
+        $this->assertTrue($callbackFired);
+    }
+
     public function testOnHeadersWritten() {
         $connection = $this->getMock('React\SocketClient\ConnectorInterface', array(
             'create',
