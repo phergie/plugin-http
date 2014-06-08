@@ -85,7 +85,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     {
         $that = $this;
 
-        $this->getClient(function($client) use ($request, $that) {
+        $this->getClient(function(HttpClient $client) use ($request, $that) {
             $requestId = uniqid();
             $buffer = '';
             $httpReponse = null;
@@ -116,7 +116,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     {
         $that = $this;
 
-        $this->getClient(function($client) use ($request, $that) {
+        $this->getClient(function(HttpClient $client) use ($request, $that) {
             $requestId = uniqid();
             $buffer = '';
             $httpReponse = null;
