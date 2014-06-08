@@ -566,4 +566,80 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             $this->isType('string')
         );
     }
+
+    public function testStreamingMakeHttpRequestCallbacks() {
+        $httpRequest = new Request(array(
+            'url' => 'http://example.com/',
+            'resolveCallback' => function() {},
+        ));
+        $request = Phake::mock('React\HttpClient\Request');
+        $response = Phake::mock('React\HttpClient\Response');
+        $connection = Phake::mock('React\Stream\Stream');
+        $error = new \Exception();
+
+        $client = Phake::mock('React\HttpClient\Client');
+        Phake::when($client)->request('GET', 'http://example.com/', array())->thenReturn($request);
+
+        $plugin = Phake::partialMock('\WyriHaximus\Phergie\Plugin\Http\Plugin');
+        Phake::when($plugin)->getClient($this->isType('callable'))->thenReturn($client);
+        Phake::when($plugin)->onResponseStream($response, $httpRequest, '', null, $this->isType('string'))->thenReturn(true);
+        Phake::when($plugin)->onEnd($httpRequest, '', null, $this->isType('string'))->thenReturn(true);
+        Phake::when($plugin)->onHeadersWritten($connection, $httpRequest, $this->isType('string'))->thenReturn(true);
+        Phake::when($plugin)->onError($error, $httpRequest, $this->isType('string'))->thenReturn(true);
+
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->makeStreamingHttpRequest($httpRequest);
+
+        Phake::verify($plugin)->getClient(
+            Phake::capture($callbackClient)->when($this->isType('callable'))
+        );
+        $callbackClient($client);
+
+        Phake::verify($request)->on(
+            'response',
+            Phake::capture($callbackOnRequest)->when($this->isType('callable'))
+        );
+        $callbackOnRequest($response);
+        Phake::verify($plugin)->onResponseStream(
+            $response,
+            $httpRequest,
+            '',
+            null,
+            $this->isType('string')
+        );
+
+        Phake::verify($request)->on(
+            'end',
+            Phake::capture($callbackOnEnd)->when($this->isType('callable'))
+        );
+        $callbackOnEnd();
+        Phake::verify($plugin)->onEnd(
+            $httpRequest,
+            '',
+            null,
+            $this->isType('string')
+        );
+
+        Phake::verify($request)->on(
+            'headers-written',
+            Phake::capture($callbackOnHeadersWritten)->when($this->isType('callable'))
+        );
+        $callbackOnHeadersWritten($connection);
+        Phake::verify($plugin)->onHeadersWritten(
+            $connection,
+            $httpRequest,
+            $this->isType('string')
+        );
+
+        Phake::verify($request)->on(
+            'error',
+            Phake::capture($callbackOnError)->when($this->isType('callable'))
+        );
+        $callbackOnError($error);
+        Phake::verify($plugin)->onError(
+            $error,
+            $httpRequest,
+            $this->isType('string')
+        );
+    }
 }
