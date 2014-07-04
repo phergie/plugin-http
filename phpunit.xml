@@ -9,13 +9,13 @@
 >
     <testsuites>
         <testsuite name="wyrihaximus/phergie-http test suite">
-            <directory>./WyriHaximus/</directory>
+            <directory>tests/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>../src/</directory>
+            <directory>src/</directory>
         </whitelist>
     </filter>
 </phpunit>
