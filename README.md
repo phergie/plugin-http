@@ -31,7 +31,7 @@ return array(
     'plugins' => array(
 
         // dependency
-        new \WyriHaximus\Phergie\Plugin\Dns\Plugin,
+        new \WyriHaximus\Phergie\Plugin\Dns\Plugin, // Needed to do DNS lookups
 
         new \WyriHaximus\Phergie\Plugin\Http\Plugin(array(
 

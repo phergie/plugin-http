@@ -71,10 +71,6 @@ class Request
         if (!isset($this->config['rejectCallback'])) {
             $this->config['rejectCallback'] = function() {};
         }
-        
-        if (!isset($this->config['buffer'])) {
-            $this->config['buffer'] = true;
-        }
     }
     
     public function getMethod() {
@@ -107,9 +103,5 @@ class Request
     
     public function callReject($error) {
         return $this->config['rejectCallback']($error);
-    }
-    
-    public function shouldBuffer() {
-        return (bool)$this->config['buffer'];
     }
 }

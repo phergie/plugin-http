@@ -11,7 +11,7 @@
     "require": {
         "phergie/phergie-irc-bot-react": "dev-master",
         "react/http-client": "0.3.*",
-        "wyrihaximus/phergie-dns": "dev-master"
+        "wyrihaximus/phergie-dns": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*",
