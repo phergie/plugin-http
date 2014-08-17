@@ -26,9 +26,19 @@ use React\Dns\Resolver\Resolver;
  */
 class Plugin extends AbstractPlugin implements LoopAwareInterface
 {
+    /**
+     * @var null|Resolver
+     */
     protected $resolver;
+
+    /**
+     * @var null|HttpClient
+     */
     protected $client;
 
+    /**
+     * @var string
+     */
     protected $dnsResolverEvent = 'dns.resolver';
 
     /**
@@ -47,14 +57,23 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         }
     }
 
+    /**
+     * @param LoopInterface $loop
+     */
     public function setLoop(LoopInterface $loop) {
         $this->loop = $loop;
     }
 
+    /**
+     * @param Resolver $resolver
+     */
     public function setResolver(Resolver $resolver) {
         $this->resolver = $resolver;
     }
 
+    /**
+     * @param HttpClient $client
+     */
     public function setClient(HttpClient $client) {
         $this->client = $client;
     }
@@ -72,6 +91,9 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         );
     }
 
+    /**
+     * @param $message
+     */
     public function logDebug($message) {
         $this->logger->debug('[Http]' . $message);
     }
@@ -138,6 +160,13 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         });
     }
 
+    /**
+     * @param Response $response
+     * @param Request $request
+     * @param string $buffer
+     * @param int $httpReponse
+     * @param string $requestId
+     */
     public function onResponse(Response $response, Request $request, &$buffer, &$httpReponse, $requestId) {
         $that = $this;
         $httpReponse = $response;
@@ -150,6 +179,13 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         });
     }
 
+    /**
+     * @param Response $response
+     * @param Request $request
+     * @param string $buffer
+     * @param int $httpReponse
+     * @param string $requestId
+     */
     public function onResponseStream(Response $response, Request $request, &$buffer, &$httpReponse, $requestId) {
         $that = $this;
         $httpReponse = $response;
@@ -163,6 +199,12 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         });
     }
 
+    /**
+     * @param Request $request
+     * @param string $buffer
+     * @param int $httpReponse
+     * @param string $requestId
+     */
     public function onEnd(Request $request, &$buffer, &$httpReponse, $requestId) {
         if ($httpReponse instanceof Response) {
             $this->logDebug('[' . $requestId . ']Request done');
@@ -173,16 +215,29 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         }
     }
 
+    /**
+     * @param $connection
+     * @param Request $request
+     * @param string $requestId
+     */
     public function onHeadersWritten($connection, Request $request, $requestId) {
         $this->logDebug('[' . $requestId . ']Writing body');
         $connection->write($request->getBody());
     }
 
-    public function onError($error, Request $request, $requestId) {
+    /**
+     * @param Exception $error
+     * @param Request $request
+     * @param int $requestId
+     */
+    public function onError(Exception $error, Request $request, $requestId) {
         $this->logDebug('[' . $requestId . ']Error executing request: ' . (string)$error);
         $request->callReject($error);
     }
 
+    /**
+     * @param callable $callback
+     */
     public function getClient($callback)
     {
         if ($this->client instanceof HttpClient) {
@@ -204,9 +259,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     }
 
     /**
-     * @param Factory $factory
-     *
-     * @return Resolver
+     * @param callable $callback
      */
     public function getResolver($callback)
     {
