@@ -226,11 +226,11 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     }
 
     /**
-     * @param Exception $error
+     * @param \Exception $error
      * @param Request $request
      * @param int $requestId
      */
-    public function onError(Exception $error, Request $request, $requestId) {
+    public function onError(\Exception $error, Request $request, $requestId) {
         $this->logDebug('[' . $requestId . ']Error executing request: ' . (string)$error);
         $request->callReject($error);
     }
