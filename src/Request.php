@@ -94,6 +94,9 @@ class Request
         return $this->config['body'];
     }
     
+    /**
+     * @param string $buffer
+     */
     public function callResolve($buffer, $headers, $code) {
         return $this->config['resolveCallback']($buffer, $headers, $code);
     }
@@ -106,6 +109,9 @@ class Request
         return $this->config['dataCallback']($data);
     }
     
+    /**
+     * @param \Exception $error
+     */
     public function callReject($error) {
         return $this->config['rejectCallback']($error);
     }
