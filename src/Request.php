@@ -19,6 +19,11 @@ namespace WyriHaximus\Phergie\Plugin\Http;
 class Request
 {
     /**
+     * @var array
+     */
+    protected $config = array();
+
+    /**
      * Accepts plugin configuration.
      *
      * Supported keys:
