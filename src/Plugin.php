@@ -115,13 +115,13 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $this->getClient(function(HttpClient $client) use ($request, $that) {
             $requestId = uniqid();
             $buffer = '';
-            $httpReponse = null;
+            $httpResponse = null;
             $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-            $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpReponse, $that, $requestId) {
-                $that->onResponse($response, $request, $buffer, $httpReponse, $requestId);
+            $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpResponse, $that, $requestId) {
+                $that->onResponse($response, $request, $buffer, $httpResponse, $requestId);
             });
-            $httpRequest->on('end', function () use ($request, &$buffer, &$httpReponse, $that, $requestId) {
-                $that->onEnd($request, $buffer, $httpReponse, $requestId);
+            $httpRequest->on('end', function () use ($request, &$buffer, &$httpResponse, $that, $requestId) {
+                $that->onEnd($request, $buffer, $httpResponse, $requestId);
             });
             $httpRequest->on('headers-written', function ($connection) use ($request, $that, $requestId) {
                 $that->onHeadersWritten($connection, $request, $requestId);
@@ -146,13 +146,13 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $this->getClient(function(HttpClient $client) use ($request, $that) {
             $requestId = uniqid();
             $buffer = '';
-            $httpReponse = null;
+            $httpResponse = null;
             $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-            $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpReponse, $that, $requestId) {
-                $that->onResponseStream($response, $request, $buffer, $httpReponse, $requestId);
+            $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpResponse, $that, $requestId) {
+                $that->onResponseStream($response, $request, $buffer, $httpResponse, $requestId);
             });
-            $httpRequest->on('end', function () use ($request, &$buffer, &$httpReponse, $that, $requestId) {
-                $that->onEnd($request, $buffer, $httpReponse, $requestId);
+            $httpRequest->on('end', function () use ($request, &$buffer, &$httpResponse, $that, $requestId) {
+                $that->onEnd($request, $buffer, $httpResponse, $requestId);
             });
             $httpRequest->on('headers-written', function ($connection) use ($request, $that, $requestId) {
                 $that->onHeadersWritten($connection, $request, $requestId);
