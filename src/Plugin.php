@@ -27,6 +27,11 @@ use React\Dns\Resolver\Resolver;
 class Plugin extends AbstractPlugin implements LoopAwareInterface
 {
     /**
+     * @var null|LoopInterface
+     */
+    protected $loop;
+
+    /**
      * @var null|Resolver
      */
     protected $resolver;
