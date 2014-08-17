@@ -70,6 +70,13 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     }
 
     /**
+     * @return null|LoopInterface
+     */
+    public function getLoop() {
+        return $this->loop;
+    }
+
+    /**
      * @param Resolver $resolver
      */
     public function setResolver(Resolver $resolver) {
@@ -257,7 +264,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $this->getResolver(function($resolver) use ($that, $callback, $that) {
             $that->logDebug('Requesting DNS Resolver');
             $factory = new HttpClientFactory();
-            $client = $factory->create($that->loop, $resolver);
+            $client = $factory->create($that->getLoop(), $resolver);
             $that->setClient($client);
             $callback($client);
         });
