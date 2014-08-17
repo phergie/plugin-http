@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "98775d7251c2b1d1fdc7f245d288ae36",
+    "hash": "776c334d3af5de43514246686b4bcb68",
     "packages": [
         {
             "name": "evenement/evenement",
@@ -53,28 +53,23 @@
         },
         {
             "name": "guzzle/parser",
-            "version": "v3.9.1",
+            "version": "v2.8.8",
             "target-dir": "Guzzle/Parser",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/parser.git",
-                "reference": "6874d171318a8e93eb6d224cf85e4678490b625c"
+                "reference": "8f5152833af2d9505bcefb0a10c4b6987aa9a6b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/parser/zipball/6874d171318a8e93eb6d224cf85e4678490b625c",
-                "reference": "6874d171318a8e93eb6d224cf85e4678490b625c",
+                "url": "https://api.github.com/repos/guzzle/parser/zipball/8f5152833af2d9505bcefb0a10c4b6987aa9a6b1",
+                "reference": "8f5152833af2d9505bcefb0a10c4b6987aa9a6b1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.7-dev"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Guzzle\\Parser": ""
@@ -93,7 +88,7 @@
                 "message",
                 "url"
             ],
-            "time": "2014-02-05 18:29:46"
+            "time": "2012-09-20 20:28:06"
         },
         {
             "name": "monolog/monolog",
@@ -163,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phergie/phergie-irc-bot-react.git",
-                "reference": "559d23828da346d20ccac4652fecda778e5dd6f7"
+                "reference": "789a3dc8a256eb9221f340d2a494789a7d60fd02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phergie/phergie-irc-bot-react/zipball/559d23828da346d20ccac4652fecda778e5dd6f7",
-                "reference": "559d23828da346d20ccac4652fecda778e5dd6f7",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-bot-react/zipball/789a3dc8a256eb9221f340d2a494789a7d60fd02",
+                "reference": "789a3dc8a256eb9221f340d2a494789a7d60fd02",
                 "shasum": ""
             },
             "require": {
@@ -202,7 +197,7 @@
                 "irc",
                 "react"
             ],
-            "time": "2014-06-20 13:05:13"
+            "time": "2014-05-13 00:36:29"
         },
         {
             "name": "phergie/phergie-irc-client-react",
@@ -210,12 +205,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phergie/phergie-irc-client-react.git",
-                "reference": "403b09a15429889cef00ddf76cdfc6e72524e832"
+                "reference": "b161fc351ffafb85280277fbae1f9174e3419871"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phergie/phergie-irc-client-react/zipball/403b09a15429889cef00ddf76cdfc6e72524e832",
-                "reference": "403b09a15429889cef00ddf76cdfc6e72524e832",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-client-react/zipball/b161fc351ffafb85280277fbae1f9174e3419871",
+                "reference": "b161fc351ffafb85280277fbae1f9174e3419871",
                 "shasum": ""
             },
             "require": {
@@ -225,18 +220,12 @@
                 "phergie/phergie-irc-parser": "dev-master",
                 "php": ">=5.3.3",
                 "psr/log": "~1.0",
-                "react/dns": "0.3.*",
                 "react/event-loop": "0.3.*",
-                "react/promise": "1.0.*",
                 "react/stream": "0.3.*"
             },
             "require-dev": {
                 "phake/phake": "2.0.0-beta2",
-                "phpunit/phpunit": "4.1.*",
-                "react/socket-client": "0.3.*"
-            },
-            "suggest": {
-                "react/socket-client": "provides SSL support (use 0.3.*)"
+                "phpunit/phpunit": "4.1.*"
             },
             "type": "library",
             "autoload": {
@@ -254,7 +243,7 @@
                 "irc",
                 "react"
             ],
-            "time": "2014-06-20 13:43:56"
+            "time": "2014-05-13 00:16:35"
         },
         {
             "name": "phergie/phergie-irc-connection",
@@ -301,12 +290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phergie/phergie-irc-event.git",
-                "reference": "2a8f55ba02b078144106e59259acfcd279ef80bd"
+                "reference": "af1464f120bf5634f849c13786819d43745a71bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phergie/phergie-irc-event/zipball/2a8f55ba02b078144106e59259acfcd279ef80bd",
-                "reference": "2a8f55ba02b078144106e59259acfcd279ef80bd",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-event/zipball/af1464f120bf5634f849c13786819d43745a71bb",
+                "reference": "af1464f120bf5634f849c13786819d43745a71bb",
                 "shasum": ""
             },
             "require": {
@@ -332,7 +321,7 @@
                 "event",
                 "irc"
             ],
-            "time": "2014-06-20 02:33:20"
+            "time": "2014-05-12 23:21:36"
         },
         {
             "name": "phergie/phergie-irc-generator",
@@ -453,17 +442,17 @@
         },
         {
             "name": "react/cache",
-            "version": "0.3.x-dev",
+            "version": "v0.3.2",
             "target-dir": "React/Cache",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/cache.git",
-                "reference": "437357102effb562b44dbc0ac4eb2c209c4f572b"
+                "reference": "a821f4318e38fc7efd02d81698fcee9d3d34dafe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/cache/zipball/437357102effb562b44dbc0ac4eb2c209c4f572b",
-                "reference": "437357102effb562b44dbc0ac4eb2c209c4f572b",
+                "url": "https://api.github.com/repos/reactphp/cache/zipball/a821f4318e38fc7efd02d81698fcee9d3d34dafe",
+                "reference": "a821f4318e38fc7efd02d81698fcee9d3d34dafe",
                 "shasum": ""
             },
             "require": {
@@ -536,17 +525,17 @@
         },
         {
             "name": "react/event-loop",
-            "version": "0.3.x-dev",
+            "version": "v0.3.3",
             "target-dir": "React/EventLoop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop.git",
-                "reference": "235cddfa999a392e7d63dc9bef2e042492608d9f"
+                "reference": "49208fa3a15c9eae4adf8351ee9caa4064fe550d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/235cddfa999a392e7d63dc9bef2e042492608d9f",
-                "reference": "235cddfa999a392e7d63dc9bef2e042492608d9f",
+                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/49208fa3a15c9eae4adf8351ee9caa4064fe550d",
+                "reference": "49208fa3a15c9eae4adf8351ee9caa4064fe550d",
                 "shasum": ""
             },
             "require": {
@@ -575,25 +564,25 @@
             "keywords": [
                 "event-loop"
             ],
-            "time": "2013-07-21 02:23:09"
+            "time": "2013-07-08 22:38:22"
         },
         {
             "name": "react/http-client",
-            "version": "0.3.x-dev",
+            "version": "v0.3.2",
             "target-dir": "React/HttpClient",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/http-client.git",
-                "reference": "77f96040ea78d625b036e0ac2b2ac56a222caa3e"
+                "reference": "b96aa5dfa23c83e669de8d4acb717b03ae70c088"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/http-client/zipball/77f96040ea78d625b036e0ac2b2ac56a222caa3e",
-                "reference": "77f96040ea78d625b036e0ac2b2ac56a222caa3e",
+                "url": "https://api.github.com/repos/reactphp/http-client/zipball/b96aa5dfa23c83e669de8d4acb717b03ae70c088",
+                "reference": "b96aa5dfa23c83e669de8d4acb717b03ae70c088",
                 "shasum": ""
             },
             "require": {
-                "guzzle/parser": "~2.8|~3.0",
+                "guzzle/parser": "2.8.*",
                 "php": ">=5.3.3",
                 "react/dns": "0.3.*",
                 "react/socket-client": "0.3.*"
@@ -617,7 +606,7 @@
             "keywords": [
                 "http"
             ],
-            "time": "2014-06-08 16:29:44"
+            "time": "2013-04-21 12:54:33"
         },
         {
             "name": "react/promise",
@@ -664,17 +653,17 @@
         },
         {
             "name": "react/socket",
-            "version": "0.3.x-dev",
+            "version": "v0.3.2",
             "target-dir": "React/Socket",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket.git",
-                "reference": "19bc0c4309243717396022ffb2e59be1cc784327"
+                "reference": "9cc32838d25a934ce950d2662cce2ff1b9e9f8aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket/zipball/19bc0c4309243717396022ffb2e59be1cc784327",
-                "reference": "19bc0c4309243717396022ffb2e59be1cc784327",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/9cc32838d25a934ce950d2662cce2ff1b9e9f8aa",
+                "reference": "9cc32838d25a934ce950d2662cce2ff1b9e9f8aa",
                 "shasum": ""
             },
             "require": {
@@ -702,21 +691,21 @@
             "keywords": [
                 "Socket"
             ],
-            "time": "2014-02-17 22:32:00"
+            "time": "2013-04-26 20:23:10"
         },
         {
             "name": "react/socket-client",
-            "version": "0.3.x-dev",
+            "version": "v0.3.2",
             "target-dir": "React/SocketClient",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket-client.git",
-                "reference": "87935a0223362c36cd30cf215cbec33377d31ca4"
+                "reference": "0696ede9876749dc49670f282aab9f6c8549275b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/87935a0223362c36cd30cf215cbec33377d31ca4",
-                "reference": "87935a0223362c36cd30cf215cbec33377d31ca4",
+                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/0696ede9876749dc49670f282aab9f6c8549275b",
+                "reference": "0696ede9876749dc49670f282aab9f6c8549275b",
                 "shasum": ""
             },
             "require": {
@@ -748,17 +737,17 @@
         },
         {
             "name": "react/stream",
-            "version": "0.3.x-dev",
+            "version": "v0.3.3",
             "target-dir": "React/Stream",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "feef56628afe3fa861f0da5f92c909e029efceac"
+                "reference": "b72900ab00513b591fb101faecad38f9c8eab8da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/feef56628afe3fa861f0da5f92c909e029efceac",
-                "reference": "feef56628afe3fa861f0da5f92c909e029efceac",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/b72900ab00513b591fb101faecad38f9c8eab8da",
+                "reference": "b72900ab00513b591fb101faecad38f9c8eab8da",
                 "shasum": ""
             },
             "require": {
@@ -789,24 +778,23 @@
                 "pipe",
                 "stream"
             ],
-            "time": "2014-02-16 19:48:52"
+            "time": "2013-07-09 00:44:12"
         },
         {
             "name": "wyrihaximus/phergie-dns",
-            "version": "1.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WyriHaximus/PhergieDns.git",
-                "reference": "544d088c23d8089d806762050883bf8aac3c5e99"
+                "reference": "762794ba2de451d598f4d4da91a6f357535479da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/PhergieDns/zipball/544d088c23d8089d806762050883bf8aac3c5e99",
-                "reference": "544d088c23d8089d806762050883bf8aac3c5e99",
+                "url": "https://api.github.com/repos/WyriHaximus/PhergieDns/zipball/762794ba2de451d598f4d4da91a6f357535479da",
+                "reference": "762794ba2de451d598f4d4da91a6f357535479da",
                 "shasum": ""
             },
             "require": {
-                "phergie/phergie-irc-bot-react": "dev-master",
                 "react/dns": "0.3.2"
             },
             "require-dev": {
@@ -836,7 +824,7 @@
                 "plugin",
                 "react"
             ],
-            "time": "2014-06-24 19:38:24"
+            "time": "2014-05-13 19:32:19"
         }
     ],
     "packages-dev": [
@@ -896,12 +884,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "c8decd0f7c2098bb281dff36ffcaa5f8a64adc8f"
+                "reference": "bccecf50645068b44f49a84009e2a0499a500b99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c8decd0f7c2098bb281dff36ffcaa5f8a64adc8f",
-                "reference": "c8decd0f7c2098bb281dff36ffcaa5f8a64adc8f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/bccecf50645068b44f49a84009e2a0499a500b99",
+                "reference": "bccecf50645068b44f49a84009e2a0499a500b99",
                 "shasum": ""
             },
             "require": {
@@ -953,7 +941,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-06-24 06:28:42"
+            "time": "2014-04-30 09:01:21"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1144,12 +1132,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b684140abf50c48e21330756e0a54145c1b31423"
+                "reference": "3d589867b977ff64a060e883ce0edfc350051237"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b684140abf50c48e21330756e0a54145c1b31423",
-                "reference": "b684140abf50c48e21330756e0a54145c1b31423",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3d589867b977ff64a060e883ce0edfc350051237",
+                "reference": "3d589867b977ff64a060e883ce0edfc350051237",
                 "shasum": ""
             },
             "require": {
@@ -1209,7 +1197,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-06-15 12:57:39"
+            "time": "2014-05-05 06:17:28"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1217,12 +1205,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "e60bb929c50ae4237aaf680a4f6773f4ee17f0a2"
+                "reference": "3bf40987c4e3dc379970478bf372c7eecc7b6cfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/e60bb929c50ae4237aaf680a4f6773f4ee17f0a2",
-                "reference": "e60bb929c50ae4237aaf680a4f6773f4ee17f0a2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3bf40987c4e3dc379970478bf372c7eecc7b6cfc",
+                "reference": "3bf40987c4e3dc379970478bf372c7eecc7b6cfc",
                 "shasum": ""
             },
             "require": {
@@ -1266,7 +1254,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2014-06-12 07:19:48"
+            "time": "2014-05-09 09:05:20"
         },
         {
             "name": "sebastian/diff",
@@ -1477,12 +1465,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "b01d366060f33e18fd98b0008c41a01b0d25c95c"
+                "reference": "e9525fc511a51e7bfa214c6c420515c580fda35a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/b01d366060f33e18fd98b0008c41a01b0d25c95c",
-                "reference": "b01d366060f33e18fd98b0008c41a01b0d25c95c",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/e9525fc511a51e7bfa214c6c420515c580fda35a",
+                "reference": "e9525fc511a51e7bfa214c6c420515c580fda35a",
                 "shasum": ""
             },
             "require": {
@@ -1491,7 +1479,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -1517,14 +1505,21 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-06-04 06:43:44"
+            "time": "2014-04-18 20:40:13"
         }
     ],
-    "aliases": [],
+    "aliases": [
+
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "phergie/phergie-irc-bot-react": 20
+        "phergie/phergie-irc-bot-react": 20,
+        "wyrihaximus/phergie-dns": 20
     },
-    "platform": [],
-    "platform-dev": []
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }

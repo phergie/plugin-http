@@ -8,7 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace WyriHaximus\Phergie\Plugin\Http;
+namespace WyriHaximus\Phergie\Tests\Plugin\Http;
+
+use WyriHaximus\Phergie\Plugin\Http\Plugin;
+use WyriHaximus\Phergie\Plugin\Http\Request;
 
 use Phake;
 
