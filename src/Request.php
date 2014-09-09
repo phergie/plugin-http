@@ -36,23 +36,25 @@ class Request
     public function __construct(array $config)
     {
         $this->config = $config;
-        
+
         if (!isset($this->config['url'])) {
             throw new \InvalidArgumentException('Missing url');
         }
-        
+
         if (!isset($this->config['resolveCallback'])) {
             throw new \InvalidArgumentException('Missing resolve callback');
         }
-        
+
         $this->setDefaults();
     }
 
-    public function getConfig() {
+    public function getConfig()
+    {
         return $this->config;
     }
 
-    protected function setDefaults() {
+    protected function setDefaults()
+    {
         if (!isset($this->config['method'])) {
             $this->config['method'] = 'GET';
         }
@@ -66,53 +68,61 @@ class Request
         }
 
         if (!isset($this->config['responseCallback'])) {
-            $this->config['responseCallback'] = function() {};
+            $this->config['responseCallback'] = function () {};
         }
 
         if (!isset($this->config['dataCallback'])) {
-            $this->config['dataCallback'] = function() {};
+            $this->config['dataCallback'] = function () {};
         }
 
         if (!isset($this->config['rejectCallback'])) {
-            $this->config['rejectCallback'] = function() {};
+            $this->config['rejectCallback'] = function () {};
         }
     }
-    
-    public function getMethod() {
+
+    public function getMethod()
+    {
         return $this->config['method'];
     }
-    
-    public function getUrl() {
+
+    public function getUrl()
+    {
         return $this->config['url'];
     }
-    
-    public function getHeaders() {
+
+    public function getHeaders()
+    {
         return $this->config['headers'];
     }
-    
-    public function getBody() {
+
+    public function getBody()
+    {
         return $this->config['body'];
     }
-    
+
     /**
      * @param string $buffer
      */
-    public function callResolve($buffer, $headers, $code) {
+    public function callResolve($buffer, $headers, $code)
+    {
         return $this->config['resolveCallback']($buffer, $headers, $code);
     }
-    
-    public function callResponse($headers, $code) {
+
+    public function callResponse($headers, $code)
+    {
         return $this->config['responseCallback']($headers, $code);
     }
-    
-    public function callData($data) {
+
+    public function callData($data)
+    {
         return $this->config['dataCallback']($data);
     }
-    
+
     /**
      * @param \Exception $error
      */
-    public function callReject($error) {
+    public function callReject($error)
+    {
         return $this->config['rejectCallback']($error);
     }
 }

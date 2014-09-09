@@ -65,28 +65,32 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     /**
      * @param LoopInterface $loop
      */
-    public function setLoop(LoopInterface $loop) {
+    public function setLoop(LoopInterface $loop)
+    {
         $this->loop = $loop;
     }
 
     /**
      * @return null|LoopInterface
      */
-    public function getLoop() {
+    public function getLoop()
+    {
         return $this->loop;
     }
 
     /**
      * @param Resolver $resolver
      */
-    public function setResolver(Resolver $resolver) {
+    public function setResolver(Resolver $resolver)
+    {
         $this->resolver = $resolver;
     }
 
     /**
      * @param HttpClient $client
      */
-    public function setClient(HttpClient $client) {
+    public function setClient(HttpClient $client)
+    {
         $this->client = $client;
     }
 
@@ -106,7 +110,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     /**
      * @param $message
      */
-    public function logDebug($message) {
+    public function logDebug($message)
+    {
         $this->logger->debug('[Http]' . $message);
     }
 
@@ -119,7 +124,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     {
         $that = $this;
 
-        $this->getClient(function(HttpClient $client) use ($request, $that) {
+        $this->getClient(function (HttpClient $client) use ($request, $that) {
             $requestId = uniqid();
             $buffer = '';
             $httpResponse = null;
@@ -150,7 +155,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     {
         $that = $this;
 
-        $this->getClient(function(HttpClient $client) use ($request, $that) {
+        $this->getClient(function (HttpClient $client) use ($request, $that) {
             $requestId = uniqid();
             $buffer = '';
             $httpResponse = null;
@@ -179,7 +184,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @param int $httpReponse
      * @param string $requestId
      */
-    public function onResponse(Response $response, Request $request, &$buffer, &$httpReponse, $requestId) {
+    public function onResponse(Response $response, Request $request, &$buffer, &$httpReponse, $requestId)
+    {
         $that = $this;
         $httpReponse = $response;
 
@@ -198,7 +204,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @param int $httpReponse
      * @param string $requestId
      */
-    public function onResponseStream(Response $response, Request $request, &$buffer, &$httpReponse, $requestId) {
+    public function onResponseStream(Response $response, Request $request, &$buffer, &$httpReponse, $requestId)
+    {
         $that = $this;
         $httpReponse = $response;
 
@@ -217,7 +224,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @param int $httpReponse
      * @param string $requestId
      */
-    public function onEnd(Request $request, &$buffer, &$httpReponse, $requestId) {
+    public function onEnd(Request $request, &$buffer, &$httpReponse, $requestId)
+    {
         if ($httpReponse instanceof Response) {
             $this->logDebug('[' . $requestId . ']Request done');
             $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
@@ -232,7 +240,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @param Request $request
      * @param string $requestId
      */
-    public function onHeadersWritten($connection, Request $request, $requestId) {
+    public function onHeadersWritten($connection, Request $request, $requestId)
+    {
         $this->logDebug('[' . $requestId . ']Writing body');
         $connection->write($request->getBody());
     }
@@ -242,7 +251,8 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @param Request $request
      * @param int $requestId
      */
-    public function onError(\Exception $error, Request $request, $requestId) {
+    public function onError(\Exception $error, Request $request, $requestId)
+    {
         $this->logDebug('[' . $requestId . ']Error executing request: ' . (string)$error);
         $request->callReject($error);
     }
@@ -261,7 +271,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $this->logDebug('Creating new HttpClient');
 
         $that = $this;
-        $this->getResolver(function($resolver) use ($that, $callback, $that) {
+        $this->getResolver(function ($resolver) use ($that, $callback, $that) {
             $that->logDebug('Requesting DNS Resolver');
             $factory = new HttpClientFactory();
             $client = $factory->create($that->getLoop(), $resolver);
@@ -283,7 +293,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $this->logDebug('Requesting DNS Resolver');
 
         $that = $this;
-        $this->emitter->emit($this->dnsResolverEvent, array(function($resolver) use ($that, $callback, $that) {
+        $this->emitter->emit($this->dnsResolverEvent, array(function ($resolver) use ($that, $callback, $that) {
             $that->logDebug('DNS Resolver received');
             $that->setResolver($resolver);
             $callback($resolver);
