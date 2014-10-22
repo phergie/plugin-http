@@ -6,14 +6,10 @@
 
 ## Install
 
-The recommended method of installation is [through composer](http://getcomposer.org).
+To install via [Composer](http://getcomposer.org/), use the command below, it will automatically detect the latest version and bind it with `~`.
 
-```JSON
-{
-    "require": {
-        "wyrihaximus/phergie-http": "dev-master"
-    }
-}
+```
+composer require wyrihaximus/phergie-http 
 ```
 
 See Phergie documentation for more information on
