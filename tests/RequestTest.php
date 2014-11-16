@@ -23,10 +23,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultConfig()
     {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-        ));
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => function () {
+                },
+            ]
+        );
         $config = $request->getConfig();
         $this->assertSame(8, count($config));
         $this->assertTrue(isset($config['url']));
@@ -36,7 +39,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($config['method']));
         $this->assertSame('GET', $config['method']);
         $this->assertTrue(isset($config['headers']));
-        $this->assertSame(array(), $config['headers']);
+        $this->assertSame([], $config['headers']);
         $this->assertTrue(isset($config['body']));
         $this->assertSame('', $config['body']);
         $this->assertTrue(isset($config['responseCallback']));
@@ -47,7 +50,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('callable', $config['rejectCallback']);
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame('http://example.com/', $request->getUrl());
-        $this->assertSame(array(), $request->getHeaders());
+        $this->assertSame([], $request->getHeaders());
         $this->assertSame('', $request->getBody());
     }
 
@@ -56,7 +59,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyConfig()
     {
-        $request = new Request();
+        new Request();
     }
 
     /**
@@ -64,95 +67,126 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoUrlConfig()
     {
-        $request = new Request(array());
+        new Request([]);
     }
     /**
      * @expectedException InvalidArgumentException
      */
     public function testNoResolveCallbackConfig()
     {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-        ));
+        new Request(
+            [
+                'url' => 'http://example.com/',
+            ]
+        );
     }
 
     public function testGetUrl()
     {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-        ));
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => function () {
+                },
+            ]
+        );
         $this->assertSame('http://example.com/', $request->getUrl());
     }
 
     public function testGetMethod()
     {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'method' => 'POST',
-        ));
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => function () {
+                },
+                'method' => 'POST',
+            ]
+        );
         $this->assertSame('POST', $request->getMethod());
     }
 
     public function testGetHeaders()
     {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'headers' => array(
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => function () {
+                },
+                'headers' => [
+                    'foo' => 'bar',
+                ],
+            ]
+        );
+        $this->assertSame(
+            [
                 'foo' => 'bar',
-            ),
-        ));
-        $this->assertSame(array(
-            'foo' => 'bar',
-        ), $request->getHeaders());
+            ],
+            $request->getHeaders()
+        );
     }
 
     public function testGetBody()
     {
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'body' => 'foo:bar',
-        ));
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => function () {
+                },
+                'body' => 'foo:bar',
+            ]
+        );
         $this->assertSame('foo:bar', $request->getBody());
     }
 
     public function testCallResolve()
     {
         $callbackFired = false;
-        $that = $this;
-        $callback = function($buffer, $headers, $code) use (&$callbackFired, $that) {
-            $that->assertSame('bar:foo', $buffer);
-            $that->assertSame(array('bar' => 'foo'), $headers);
-            $that->assertSame(123, $code);
+        $callback = function ($buffer, $headers, $code) use (&$callbackFired) {
+            $this->assertSame('bar:foo', $buffer);
+            $this->assertSame(
+                [
+                    'bar' => 'foo',
+                ],
+                $headers
+            );
+            $this->assertSame(123, $code);
             $callbackFired = true;
         };
 
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => $callback,
-        ));
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => $callback,
+            ]
+        );
 
-        $request->callResolve('bar:foo', array('bar' => 'foo'), 123);
+        $request->callResolve(
+            'bar:foo',
+            [
+                'bar' => 'foo',
+            ],
+            123
+        );
         $this->assertTrue($callbackFired);
     }
 
     public function testCallReject()
     {
         $callbackFired = false;
-        $that = $this;
-        $callback = function($error) use (&$callbackFired, $that) {
-            $that->assertSame('bar:foo', $error);
+        $callback = function ($error) use (&$callbackFired) {
+            $this->assertSame('bar:foo', $error);
             $callbackFired = true;
         };
 
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'rejectCallback' => $callback,
-        ));
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => function () {
+                },
+                'rejectCallback' => $callback,
+            ]
+        );
 
         $request->callReject('bar:foo');
         $this->assertTrue($callbackFired);
@@ -161,37 +195,51 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testCallResponse()
     {
         $callbackFired = false;
-        $that = $this;
-        $callback = function($headers, $code) use (&$callbackFired, $that) {
-            $that->assertSame(array('bar' => 'foo'), $headers);
-            $that->assertSame(123, $code);
+        $callback = function ($headers, $code) use (&$callbackFired) {
+            $this->assertSame(
+                [
+                    'bar' => 'foo'
+                ],
+                $headers
+            );
+            $this->assertSame(123, $code);
             $callbackFired = true;
         };
 
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'responseCallback' => $callback,
-        ));
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => function () {
+                },
+                'responseCallback' => $callback,
+            ]
+        );
 
-        $request->callResponse(array('bar' => 'foo'), 123);
+        $request->callResponse(
+            [
+                'bar' => 'foo'
+            ],
+            123
+        );
         $this->assertTrue($callbackFired);
     }
 
     public function testCallData()
     {
         $callbackFired = false;
-        $that = $this;
-        $callback = function($data) use (&$callbackFired, $that) {
-            $that->assertSame('bar:foo', $data);
+        $callback = function ($data) use (&$callbackFired) {
+            $this->assertSame('bar:foo', $data);
             $callbackFired = true;
         };
 
-        $request = new Request(array(
-            'url' => 'http://example.com/',
-            'resolveCallback' => function() {},
-            'dataCallback' => $callback,
-        ));
+        $request = new Request(
+            [
+                'url' => 'http://example.com/',
+                'resolveCallback' => function () {
+                },
+                'dataCallback' => $callback,
+            ]
+        );
 
         $request->callData('bar:foo');
         $this->assertTrue($callbackFired);

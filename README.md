@@ -22,29 +22,29 @@ The HTTP plugin requires the [DNS plugin](https://github.com/WyriHaximus/Phergie
 ## Configuration
 
 ```php
-return array(
+return [
 
-    'plugins' => array(
+    'plugins' => [
 
         // dependency
         new \WyriHaximus\Phergie\Plugin\Dns\Plugin, // Needed to do DNS lookups
 
-        new \WyriHaximus\Phergie\Plugin\Http\Plugin(array(
+        new \WyriHaximus\Phergie\Plugin\Http\Plugin([
 
             // All configuration is optional
 
             'dnsResolverEvent' => 'dns.resolver', // Event for retrieving the DNS resolver, defaults to 'dns.resolver'
 
-        )),
+        ]),
 
-    )
-);
+    ]
+];
 ```
 
 ## Usage
 
 ```php
-$this->emitter->emit('http.request', array(new \WyriHaximus\Phergie\Plugin\Http\Request(array(
+$this->emitter->emit('http.request', [new \WyriHaximus\Phergie\Plugin\Http\Request([
     'url' => 'https://github.com/',                     // Required
     'resolveCallback' => function($buffer, $headers, $code) { // Required
         // Data received do something with it
@@ -56,7 +56,7 @@ $this->emitter->emit('http.request', array(new \WyriHaximus\Phergie\Plugin\Http\
     'dataCallback' => function($data) {},               // Optional, callback that triggers for each chunk of incoming data
     'rejectCallback' => function($error) {},            // Optional, callback that gets triggered on connection errors
     'buffer' => true,                                   // Optional, buffer the incoming requested file data and when completed pass it to resolveCallback, set to false to disable that
-))));
+])]);
 ```
 
 A note about `resolveCallback` and `rejectCallback`. `rejectCallback` will only fire on a socket error. So `resolveCallback` will be called no matter what [`HTTP status code`](http://en.wikipedia.org/wiki/List_of_HTTP_status_codes) as the request has been successful on a connection level. Choosing the appropriate response to a status code is up to the event callee.

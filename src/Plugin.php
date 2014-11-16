@@ -55,7 +55,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      *
      * @param array $config
      */
-    public function __construct(array $config = array())
+    public function __construct(array $config = [])
     {
         if (isset($config['dnsResolverEvent'])) {
             $this->dnsResolverEvent = $config['dnsResolverEvent'];
@@ -101,10 +101,10 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'http.request' => 'makeHttpRequest',
             'http.streamingRequest' => 'makeStreamingHttpRequest',
-        );
+        ];
     }
 
     /**
@@ -122,28 +122,40 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function makeHttpRequest(Request $request)
     {
-        $that = $this;
-
-        $this->getClient(function (HttpClient $client) use ($request, $that) {
-            $requestId = uniqid();
-            $buffer = '';
-            $httpResponse = null;
-            $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-            $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpResponse, $that, $requestId) {
-                $that->onResponse($response, $request, $buffer, $httpResponse, $requestId);
-            });
-            $httpRequest->on('end', function () use ($request, &$buffer, &$httpResponse, $that, $requestId) {
-                $that->onEnd($request, $buffer, $httpResponse, $requestId);
-            });
-            $httpRequest->on('headers-written', function ($connection) use ($request, $that, $requestId) {
-                $that->onHeadersWritten($connection, $request, $requestId);
-            });
-            $httpRequest->on('error', function ($error) use ($request, $that, $requestId) {
-                $that->onError($error, $request, $requestId);
-            });
-            $that->logDebug('[' . $requestId . ']Sending request');
-            $httpRequest->end();
-        });
+        $this->getClient(
+            function (HttpClient $client) use ($request) {
+                $requestId = uniqid();
+                $buffer = '';
+                $httpResponse = null;
+                $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
+                $httpRequest->on(
+                    'response',
+                    function (Response $response) use ($request, &$buffer, &$httpResponse, $requestId) {
+                        $this->onResponse($response, $request, $buffer, $httpResponse, $requestId);
+                    }
+                );
+                $httpRequest->on(
+                    'end',
+                    function () use ($request, &$buffer, &$httpResponse, $requestId) {
+                        $this->onEnd($request, $buffer, $httpResponse, $requestId);
+                    }
+                );
+                $httpRequest->on(
+                    'headers-written',
+                    function ($connection) use ($request, $requestId) {
+                        $this->onHeadersWritten($connection, $request, $requestId);
+                    }
+                );
+                $httpRequest->on(
+                    'error',
+                    function ($error) use ($request, $requestId) {
+                        $this->onError($error, $request, $requestId);
+                    }
+                );
+                $this->logDebug('[' . $requestId . ']Sending request');
+                $httpRequest->end();
+            }
+        );
     }
 
     /**
@@ -153,28 +165,40 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function makeStreamingHttpRequest(Request $request)
     {
-        $that = $this;
-
-        $this->getClient(function (HttpClient $client) use ($request, $that) {
-            $requestId = uniqid();
-            $buffer = '';
-            $httpResponse = null;
-            $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-            $httpRequest->on('response', function (Response $response) use ($request, &$buffer, &$httpResponse, $that, $requestId) {
-                $that->onResponseStream($response, $request, $buffer, $httpResponse, $requestId);
-            });
-            $httpRequest->on('end', function () use ($request, &$buffer, &$httpResponse, $that, $requestId) {
-                $that->onEnd($request, $buffer, $httpResponse, $requestId);
-            });
-            $httpRequest->on('headers-written', function ($connection) use ($request, $that, $requestId) {
-                $that->onHeadersWritten($connection, $request, $requestId);
-            });
-            $httpRequest->on('error', function ($error) use ($request, $that, $requestId) {
-                $that->onError($error, $request, $requestId);
-            });
-            $that->logDebug('[' . $requestId . ']Sending request');
-            $httpRequest->end();
-        });
+        $this->getClient(
+            function (HttpClient $client) use ($request) {
+                $requestId = uniqid();
+                $buffer = '';
+                $httpResponse = null;
+                $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
+                $httpRequest->on(
+                    'response',
+                    function (Response $response) use ($request, &$buffer, &$httpResponse, $requestId) {
+                        $this->onResponseStream($response, $request, $buffer, $httpResponse, $requestId);
+                    }
+                );
+                $httpRequest->on(
+                    'end',
+                    function () use ($request, &$buffer, &$httpResponse, $requestId) {
+                        $this->onEnd($request, $buffer, $httpResponse, $requestId);
+                    }
+                );
+                $httpRequest->on(
+                    'headers-written',
+                    function ($connection) use ($request, $requestId) {
+                        $this->onHeadersWritten($connection, $request, $requestId);
+                    }
+                );
+                $httpRequest->on(
+                    'error',
+                    function ($error) use ($request, $requestId) {
+                        $this->onError($error, $request, $requestId);
+                    }
+                );
+                $this->logDebug('[' . $requestId . ']Sending request');
+                $httpRequest->end();
+            }
+        );
     }
 
     /**
@@ -186,15 +210,17 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function onResponse(Response $response, Request $request, &$buffer, &$httpReponse, $requestId)
     {
-        $that = $this;
         $httpReponse = $response;
 
         $this->logDebug('[' . $requestId . ']Response received');
         $request->callResponse($response->getHeaders(), $response->getCode());
-        $response->on('data', function ($data) use (&$buffer, $that, $requestId) {
-            $that->logDebug('[' . $requestId . ']Data received');
-            $buffer .= $data;
-        });
+        $response->on(
+            'data',
+            function ($data) use (&$buffer, $requestId) {
+                $this->logDebug('[' . $requestId . ']Data received');
+                $buffer .= $data;
+            }
+        );
     }
 
     /**
@@ -206,16 +232,18 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function onResponseStream(Response $response, Request $request, &$buffer, &$httpReponse, $requestId)
     {
-        $that = $this;
         $httpReponse = $response;
 
         $this->logDebug('[' . $requestId . ']Response received');
         $request->callResponse($response->getHeaders(), $response->getCode());
 
-        $response->on('data', function ($data) use ($request, &$buffer, $that, $requestId) {
-            $that->logDebug('[' . $requestId . ']Data received');
-            $request->callData($data);
-        });
+        $response->on(
+            'data',
+            function ($data) use ($request, &$buffer, $requestId) {
+                $this->logDebug('[' . $requestId . ']Data received');
+                $request->callData($data);
+            }
+        );
     }
 
     /**
@@ -270,14 +298,15 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
 
         $this->logDebug('Creating new HttpClient');
 
-        $that = $this;
-        $this->getResolver(function ($resolver) use ($that, $callback, $that) {
-            $that->logDebug('Requesting DNS Resolver');
-            $factory = new HttpClientFactory();
-            $client = $factory->create($that->getLoop(), $resolver);
-            $that->setClient($client);
-            $callback($client);
-        });
+        $this->getResolver(
+            function ($resolver) use ($callback) {
+                $this->logDebug('Requesting DNS Resolver');
+                $factory = new HttpClientFactory();
+                $client = $factory->create($this->getLoop(), $resolver);
+                $this->setClient($client);
+                $callback($client);
+            }
+        );
     }
 
     /**
@@ -292,11 +321,15 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
 
         $this->logDebug('Requesting DNS Resolver');
 
-        $that = $this;
-        $this->emitter->emit($this->dnsResolverEvent, array(function ($resolver) use ($that, $callback, $that) {
-            $that->logDebug('DNS Resolver received');
-            $that->setResolver($resolver);
-            $callback($resolver);
-        }));
+        $this->emitter->emit(
+            $this->dnsResolverEvent,
+            [
+                function ($resolver) use ($callback) {
+                    $this->logDebug('DNS Resolver received');
+                    $this->setResolver($resolver);
+                    $callback($resolver);
+                }
+            ]
+        );
     }
 }

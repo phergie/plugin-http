@@ -21,7 +21,7 @@ class Request
     /**
      * @var array
      */
-    protected $config = array();
+    protected $config = [];
 
     /**
      * Accepts plugin configuration.
@@ -60,7 +60,7 @@ class Request
         }
 
         if (!isset($this->config['headers'])) {
-            $this->config['headers'] = array();
+            $this->config['headers'] = [];
         }
 
         if (!isset($this->config['body'])) {
@@ -68,15 +68,18 @@ class Request
         }
 
         if (!isset($this->config['responseCallback'])) {
-            $this->config['responseCallback'] = function () {};
+            $this->config['responseCallback'] = function () {
+            };
         }
 
         if (!isset($this->config['dataCallback'])) {
-            $this->config['dataCallback'] = function () {};
+            $this->config['dataCallback'] = function () {
+            };
         }
 
         if (!isset($this->config['rejectCallback'])) {
-            $this->config['rejectCallback'] = function () {};
+            $this->config['rejectCallback'] = function () {
+            };
         }
     }
 
