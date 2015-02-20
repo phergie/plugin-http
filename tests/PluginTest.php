@@ -70,15 +70,15 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         );
 
         $callbackFired = false;
-        $callback = function ($client) use (&$callbackFired, $httpClient) {
-            $this->assertSame($httpClient, $client);
+        $callback = function ($callbackClient) use (&$callbackFired, $httpClient) {
+            $this->assertSame($httpClient, $callbackClient);
             $callbackFired = true;
         };
 
         $plugin = new Plugin();
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->setClient($httpClient);
-        $plugin->getClient($callback);
+        $plugin->setHttpClient($httpClient);
+        $plugin->getHttpClient($callback);
 
         $this->assertTrue($callbackFired);
     }
@@ -117,8 +117,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             );
 
         $callbackFired = false;
-        $callback = function ($client) use (&$callbackFired) {
-            $this->assertInstanceOf('React\HttpClient\Client', $client);
+        $callback = function ($httpClient) use (&$callbackFired) {
+            $this->assertInstanceOf('React\HttpClient\Client', $httpClient);
             $callbackFired = true;
         };
 
@@ -126,7 +126,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin->setLoop($this->getMock('React\EventLoop\LoopInterface'));
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->setEventEmitter($emitter);
-        $plugin->getClient($callback);
+        $plugin->getHttpClient($callback);
 
         $this->assertTrue($callbackFired);
     }
@@ -300,7 +300,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->willReturn($httpRequest);
 
         $plugin = new Plugin();
-        $plugin->setClient($httpClient);
+        $plugin->setHttpClient($httpClient);
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->makeHttpRequest($request);
     }
@@ -350,7 +350,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->willReturn($httpRequest);
 
         $plugin = new Plugin();
-        $plugin->setClient($httpClient);
+        $plugin->setHttpClient($httpClient);
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->makeStreamingHttpRequest($request);
     }
@@ -644,11 +644,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $connection = Phake::mock('React\Stream\Stream');
         $error = new \Exception();
 
-        $client = Phake::mock('React\HttpClient\Client');
-        Phake::when($client)->request('GET', 'http://example.com/', [])->thenReturn($request);
+        $httpClient = Phake::mock('React\HttpClient\Client');
+        Phake::when($httpClient)->request('GET', 'http://example.com/', [])->thenReturn($request);
 
         $plugin = Phake::partialMock('\WyriHaximus\Phergie\Plugin\Http\Plugin');
-        Phake::when($plugin)->getClient($this->isType('callable'))->thenReturn($client);
+        Phake::when($plugin)->getHttpClient($this->isType('callable'))->thenReturn($httpClient);
         Phake::when($plugin)->onResponse($response, $httpRequest, '', null, $this->isType('string'))->thenReturn(true);
         Phake::when($plugin)->onEnd($httpRequest, '', null, $this->isType('string'))->thenReturn(true);
         Phake::when($plugin)->onHeadersWritten($connection, $httpRequest, $this->isType('string'))->thenReturn(true);
@@ -657,10 +657,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->makeHttpRequest($httpRequest);
 
-        Phake::verify($plugin)->getClient(
+        Phake::verify($plugin)->getHttpClient(
             Phake::capture($callbackClient)->when($this->isType('callable'))
         );
-        $callbackClient($client);
+        $callbackClient($httpClient);
 
         Phake::verify($request)->on(
             'response',
@@ -724,11 +724,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $connection = Phake::mock('React\Stream\Stream');
         $error = new \Exception();
 
-        $client = Phake::mock('React\HttpClient\Client');
-        Phake::when($client)->request('GET', 'http://example.com/', [])->thenReturn($request);
+        $httpClient = Phake::mock('React\HttpClient\Client');
+        Phake::when($httpClient)->request('GET', 'http://example.com/', [])->thenReturn($request);
 
         $plugin = Phake::partialMock('\WyriHaximus\Phergie\Plugin\Http\Plugin');
-        Phake::when($plugin)->getClient($this->isType('callable'))->thenReturn($client);
+        Phake::when($plugin)->getHttpClient($this->isType('callable'))->thenReturn($httpClient);
         Phake::when($plugin)->onResponseStream(
             $response,
             $httpRequest,
@@ -743,10 +743,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->makeStreamingHttpRequest($httpRequest);
 
-        Phake::verify($plugin)->getClient(
+        Phake::verify($plugin)->getHttpClient(
             Phake::capture($callbackClient)->when($this->isType('callable'))
         );
-        $callbackClient($client);
+        $callbackClient($httpClient);
 
         Phake::verify($request)->on(
             'response',
