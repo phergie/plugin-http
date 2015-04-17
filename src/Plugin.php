@@ -32,11 +32,6 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     protected $loop;
 
     /**
-     * @var null|Resolver
-     */
-    protected $resolver;
-
-    /**
      * @var null|HttpClient
      */
     protected $client;
@@ -79,29 +74,12 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     }
 
     /**
-     * @param Resolver $resolver
-     */
-    public function setResolver(Resolver $resolver)
-    {
-        $this->resolver = $resolver;
-    }
-
-    /**
-     * @param HttpClient $client
-     */
-    public function setClient(HttpClient $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
-     *
-     *
      * @return array
      */
     public function getSubscribedEvents()
     {
         return [
+            'http.client' => 'getClient',
             'http.request' => 'makeHttpRequest',
             'http.streamingRequest' => 'makeStreamingHttpRequest',
         ];
@@ -116,8 +94,6 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     }
 
     /**
-     *
-     *
      * @param Request $request
      */
     public function makeHttpRequest(Request $request)
@@ -159,8 +135,6 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     }
 
     /**
-     *
-     *
      * @param Request $request
      */
     public function makeStreamingHttpRequest(Request $request)
@@ -205,12 +179,12 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @param Response $response
      * @param Request $request
      * @param string $buffer
-     * @param int $httpReponse
+     * @param int $httpResponse
      * @param string $requestId
      */
-    public function onResponse(Response $response, Request $request, &$buffer, &$httpReponse, $requestId)
+    public function onResponse(Response $response, Request $request, &$buffer, &$httpResponse, $requestId)
     {
-        $httpReponse = $response;
+        $httpResponse = $response;
 
         $this->logDebug('[' . $requestId . ']Response received');
         $request->callResponse($response->getHeaders(), $response->getCode());
@@ -227,12 +201,12 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @param Response $response
      * @param Request $request
      * @param string $buffer
-     * @param int $httpReponse
+     * @param int $httpResponse
      * @param string $requestId
      */
-    public function onResponseStream(Response $response, Request $request, &$buffer, &$httpReponse, $requestId)
+    public function onResponseStream(Response $response, Request $request, &$buffer, &$httpResponse, $requestId)
     {
-        $httpReponse = $response;
+        $httpResponse = $response;
 
         $this->logDebug('[' . $requestId . ']Response received');
         $request->callResponse($response->getHeaders(), $response->getCode());
@@ -249,14 +223,14 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     /**
      * @param Request $request
      * @param string $buffer
-     * @param int $httpReponse
+     * @param int $httpResponse
      * @param string $requestId
      */
-    public function onEnd(Request $request, &$buffer, &$httpReponse, $requestId)
+    public function onEnd(Request $request, &$buffer, &$httpResponse, $requestId)
     {
-        if ($httpReponse instanceof Response) {
+        if ($httpResponse instanceof Response) {
             $this->logDebug('[' . $requestId . ']Request done');
-            $request->callResolve($buffer, $httpReponse->getHeaders(), $httpReponse->getCode());
+            $request->callResolve($buffer, $httpResponse->getHeaders(), $httpResponse->getCode());
         } else {
             $this->logDebug('[' . $requestId . ']Request done but no response received');
             $request->callReject(new \Exception('Never received response'));
@@ -306,30 +280,6 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                 $this->setClient($client);
                 $callback($client);
             }
-        );
-    }
-
-    /**
-     * @param callable $callback
-     */
-    public function getResolver($callback)
-    {
-        if ($this->resolver instanceof Resolver) {
-            $callback($this->resolver);
-            return;
-        }
-
-        $this->logDebug('Requesting DNS Resolver');
-
-        $this->emitter->emit(
-            $this->dnsResolverEvent,
-            [
-                function ($resolver) use ($callback) {
-                    $this->logDebug('DNS Resolver received');
-                    $this->setResolver($resolver);
-                    $callback($resolver);
-                }
-            ]
         );
     }
 }
