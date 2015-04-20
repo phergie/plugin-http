@@ -67,16 +67,6 @@ class Request
             $this->config['body'] = '';
         }
 
-        if (!isset($this->config['responseCallback'])) {
-            $this->config['responseCallback'] = function () {
-            };
-        }
-
-        if (!isset($this->config['dataCallback'])) {
-            $this->config['dataCallback'] = function () {
-            };
-        }
-
         if (!isset($this->config['rejectCallback'])) {
             $this->config['rejectCallback'] = function () {
             };
@@ -103,22 +93,9 @@ class Request
         return $this->config['body'];
     }
 
-    /**
-     * @param string $buffer
-     */
-    public function callResolve($buffer, $headers, $code)
+    public function callResolve($response)
     {
-        return $this->config['resolveCallback']($buffer, $headers, $code);
-    }
-
-    public function callResponse($headers, $code)
-    {
-        return $this->config['responseCallback']($headers, $code);
-    }
-
-    public function callData($data)
-    {
-        return $this->config['dataCallback']($data);
+        return $this->config['resolveCallback']($response);
     }
 
     /**

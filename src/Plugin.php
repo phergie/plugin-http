@@ -10,6 +10,7 @@
  */
 namespace WyriHaximus\Phergie\Plugin\Http;
 
+use GuzzleHttp\Client;
 use Phergie\Irc\Bot\React\AbstractPlugin;
 use React\EventLoop\LoopInterface;
 use Phergie\Irc\Client\React\LoopAwareInterface;
@@ -17,6 +18,7 @@ use React\HttpClient\Client as HttpClient;
 use React\HttpClient\Factory as HttpClientFactory;
 use React\HttpClient\Response;
 use React\Dns\Resolver\Resolver;
+use WyriHaximus\React\RingPHP\HttpClientAdapter;
 
 /**
  * Plugin for Provide HTTP functionality to other plugins.
@@ -30,11 +32,6 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      * @var LoopInterface
      */
     protected $loop;
-
-    /**
-     * @var null|HttpClient
-     */
-    protected $client;
 
     /**
      * @var string
@@ -79,7 +76,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     public function getSubscribedEvents()
     {
         return [
-            'http.client' => 'getClient',
+            'http.client' => 'getGuzzleClient',
             'http.request' => 'makeHttpRequest',
             'http.streamingRequest' => 'makeStreamingHttpRequest',
         ];
@@ -98,38 +95,23 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function makeHttpRequest(Request $request)
     {
-        $this->getClient(
-            function (HttpClient $client) use ($request) {
+        $this->getGuzzleClient(
+            function (Client $client) use ($request) {
                 $requestId = uniqid();
-                $buffer = '';
                 $httpResponse = null;
-                $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-                $httpRequest->on(
-                    'response',
-                    function (Response $response) use ($request, &$buffer, &$httpResponse, $requestId) {
-                        $this->onResponse($response, $request, $buffer, $httpResponse, $requestId);
-                    }
-                );
-                $httpRequest->on(
-                    'end',
-                    function () use ($request, &$buffer, &$httpResponse, $requestId) {
-                        $this->onEnd($request, $buffer, $httpResponse, $requestId);
-                    }
-                );
-                $httpRequest->on(
-                    'headers-written',
-                    function ($connection) use ($request, $requestId) {
-                        $this->onHeadersWritten($connection, $request, $requestId);
-                    }
-                );
-                $httpRequest->on(
-                    'error',
-                    function ($error) use ($request, $requestId) {
-                        $this->onError($error, $request, $requestId);
-                    }
-                );
+                $requestObject = $client->createRequest($request->getMethod(), $request->getUrl(), [
+                    'future' => true,
+                    'stream' => false,
+                ]);
                 $this->logDebug('[' . $requestId . ']Sending request');
-                $httpRequest->end();
+                $client->send($requestObject)->then(function ($response) use ($requestId, $request) {
+                    $this->logDebug('[' . $requestId . ']Remote responded');
+                    $request->callResolve($response);
+                }, function ($error) use ($requestId, $request) {
+                    $this->logDebug('[' . $requestId . ']Error during request');
+                    $request->callResolve($error);
+                });
+
             }
         );
     }
@@ -139,147 +121,71 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
      */
     public function makeStreamingHttpRequest(Request $request)
     {
-        $this->getClient(
-            function (HttpClient $client) use ($request) {
+        $this->getGuzzleClient(
+            function (Client $client) use ($request) {
                 $requestId = uniqid();
-                $buffer = '';
                 $httpResponse = null;
-                $httpRequest = $client->request($request->getMethod(), $request->getUrl(), $request->getHeaders());
-                $httpRequest->on(
-                    'response',
-                    function (Response $response) use ($request, &$buffer, &$httpResponse, $requestId) {
-                        $this->onResponseStream($response, $request, $buffer, $httpResponse, $requestId);
-                    }
-                );
-                $httpRequest->on(
-                    'end',
-                    function () use ($request, &$buffer, &$httpResponse, $requestId) {
-                        $this->onEnd($request, $buffer, $httpResponse, $requestId);
-                    }
-                );
-                $httpRequest->on(
-                    'headers-written',
-                    function ($connection) use ($request, $requestId) {
-                        $this->onHeadersWritten($connection, $request, $requestId);
-                    }
-                );
-                $httpRequest->on(
-                    'error',
-                    function ($error) use ($request, $requestId) {
-                        $this->onError($error, $request, $requestId);
-                    }
-                );
+                $requestObject = $client->createRequest($request->getMethod(), $request->getUrl(), [
+                    'future' => true,
+                    'stream' => true,
+                ]);
                 $this->logDebug('[' . $requestId . ']Sending request');
-                $httpRequest->end();
+                $client->send($requestObject)->then(function ($response) use ($requestId, $request) {
+                    $this->logDebug('[' . $requestId . ']Remote responded');
+                    $request->callResolve($response);
+                }, function ($error) use ($requestId, $request) {
+                    $this->logDebug('[' . $requestId . ']Error during request');
+                    $request->callResolve($error);
+                });
+
             }
         );
-    }
-
-    /**
-     * @param Response $response
-     * @param Request $request
-     * @param string $buffer
-     * @param int $httpResponse
-     * @param string $requestId
-     */
-    public function onResponse(Response $response, Request $request, &$buffer, &$httpResponse, $requestId)
-    {
-        $httpResponse = $response;
-
-        $this->logDebug('[' . $requestId . ']Response received');
-        $request->callResponse($response->getHeaders(), $response->getCode());
-        $response->on(
-            'data',
-            function ($data) use (&$buffer, $requestId) {
-                $this->logDebug('[' . $requestId . ']Data received');
-                $buffer .= $data;
-            }
-        );
-    }
-
-    /**
-     * @param Response $response
-     * @param Request $request
-     * @param string $buffer
-     * @param int $httpResponse
-     * @param string $requestId
-     */
-    public function onResponseStream(Response $response, Request $request, &$buffer, &$httpResponse, $requestId)
-    {
-        $httpResponse = $response;
-
-        $this->logDebug('[' . $requestId . ']Response received');
-        $request->callResponse($response->getHeaders(), $response->getCode());
-
-        $response->on(
-            'data',
-            function ($data) use ($request, &$buffer, $requestId) {
-                $this->logDebug('[' . $requestId . ']Data received');
-                $request->callData($data);
-            }
-        );
-    }
-
-    /**
-     * @param Request $request
-     * @param string $buffer
-     * @param int $httpResponse
-     * @param string $requestId
-     */
-    public function onEnd(Request $request, &$buffer, &$httpResponse, $requestId)
-    {
-        if ($httpResponse instanceof Response) {
-            $this->logDebug('[' . $requestId . ']Request done');
-            $request->callResolve($buffer, $httpResponse->getHeaders(), $httpResponse->getCode());
-        } else {
-            $this->logDebug('[' . $requestId . ']Request done but no response received');
-            $request->callReject(new \Exception('Never received response'));
-        }
-    }
-
-    /**
-     * @param $connection
-     * @param Request $request
-     * @param string $requestId
-     */
-    public function onHeadersWritten($connection, Request $request, $requestId)
-    {
-        $this->logDebug('[' . $requestId . ']Writing body');
-        $connection->write($request->getBody());
-    }
-
-    /**
-     * @param \Exception $error
-     * @param Request $request
-     * @param int $requestId
-     */
-    public function onError(\Exception $error, Request $request, $requestId)
-    {
-        $this->logDebug('[' . $requestId . ']Error executing request: ' . (string)$error);
-        $request->callReject($error);
     }
 
     /**
      * @param callable $callback
      */
-    public function getClient($callback)
+    public function getGuzzleClient($callback)
     {
-        if ($this->client instanceof HttpClient) {
-            $this->logDebug('Existing HttpClient found, using it');
+        if ($this->client instanceof Client) {
+            $this->logDebug('Existing Guzzle client, using it');
             $callback($this->client);
             return;
         }
 
-        $this->logDebug('Creating new HttpClient');
+        $this->logDebug('Creating new Guzzle client');
 
         $this->getResolver(
             function ($resolver) use ($callback) {
                 $this->logDebug('Requesting DNS Resolver');
-                $factory = new HttpClientFactory();
-                $client = $factory->create($this->getLoop(), $resolver);
-                $this->setClient($client);
-                $callback($client);
+                $this->client = new Client([
+                    'handler' => new HttpClientAdapter($this->loop, null, $resolver),
+                ]);
+                $callback($this->client);
             }
+        );
+    }
+
+
+    /**
+     * @param callable $callback
+     */
+    public function getResolver($callback)
+    {
+        if ($this->resolver instanceof Resolver) {
+            $callback($this->resolver);
+            return;
+        }
+        $this->logDebug('Requesting DNS Resolver');
+        $this->emitter->emit(
+            $this->dnsResolverEvent,
+            [
+                function ($resolver) use ($callback) {
+                    $this->logDebug('DNS Resolver received');
+                    $this->setResolver($resolver);
+                    $callback($resolver);
+                }
+            ]
         );
     }
 }
