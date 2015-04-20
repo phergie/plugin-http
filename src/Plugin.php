@@ -14,9 +14,6 @@ use GuzzleHttp\Client;
 use Phergie\Irc\Bot\React\AbstractPlugin;
 use React\EventLoop\LoopInterface;
 use Phergie\Irc\Client\React\LoopAwareInterface;
-use React\HttpClient\Client as HttpClient;
-use React\HttpClient\Factory as HttpClientFactory;
-use React\HttpClient\Response;
 use React\Dns\Resolver\Resolver;
 use WyriHaximus\React\RingPHP\HttpClientAdapter;
 
