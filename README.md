@@ -43,19 +43,29 @@ return [
 
 ## Usage
 
+### Get Guzzle HTTP Client
+
+```php
+$this->emitter->emit('http.client', [
+    function (GuzzleHttp\Client $client) {
+        // Make HTTP requests as documented on the Guzzle docs: http://guzzle.readthedocs.org/en/latest/clients.html#asynchronous-requests
+        // When making requests make sure to pass the future flag as documented: http://guzzle.readthedocs.org/en/latest/faq.html#can-guzzle-send-asynchronous-requests
+    },
+]);
+```
+
+### Make a HTTP request
+
 ```php
 $this->emitter->emit('http.request', [new \WyriHaximus\Phergie\Plugin\Http\Request([
     'url' => 'https://github.com/',                     // Required
-    'resolveCallback' => function($buffer, $headers, $code) { // Required
+    'resolveCallback' => function($response) { // Required
         // Data received do something with it
     },
     'method' => 'GET',                                  // Optional, request method
     'headers' => array(),                               // Optional, headers for the request
     'body' => '',                                       // Optional, request body to write after the headers
-    'responseCallback' => function($headers, $code) {}, // Optional, callback that triggers with the response headers
-    'dataCallback' => function($data) {},               // Optional, callback that triggers for each chunk of incoming data
     'rejectCallback' => function($error) {},            // Optional, callback that gets triggered on connection errors
-    'buffer' => true,                                   // Optional, buffer the incoming requested file data and when completed pass it to resolveCallback, set to false to disable that
 ])]);
 ```
 
