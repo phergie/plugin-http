@@ -10,10 +10,9 @@
 
 namespace WyriHaximus\Phergie\Tests\Plugin\Http;
 
+use React\Promise\FulfilledPromise;
 use WyriHaximus\Phergie\Plugin\Http\Plugin;
 use WyriHaximus\Phergie\Plugin\Http\Request;
-
-use Phake;
 
 /**
  * Tests for the Plugin class.
@@ -23,7 +22,6 @@ use Phake;
  */
 class PluginTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetSubscribedEvents()
     {
         $plugin = new Plugin();
@@ -31,6 +29,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $subscribedEvents);
         $this->assertSame(
             [
+                'http.client' => 'getGuzzleClient',
                 'http.request' => 'makeHttpRequest',
                 'http.streamingRequest' => 'makeStreamingHttpRequest',
             ],
@@ -58,77 +57,12 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin->logDebug('foo:bar');
     }
 
-    public function testGetClient()
+    public function testGetLoop()
     {
-        $httpClient = $this->getMock(
-            'React\HttpClient\Client',
-            [],
-            [
-                $this->getMock('React\SocketClient\ConnectorInterface'),
-                $this->getMock('React\SocketClient\ConnectorInterface'),
-            ]
-        );
-
-        $callbackFired = false;
-        $callback = function ($callbackClient) use (&$callbackFired, $httpClient) {
-            $this->assertSame($httpClient, $callbackClient);
-            $callbackFired = true;
-        };
-
+        $loop = $this->getMock('React\EventLoop\LoopInterface');
         $plugin = new Plugin();
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->setHttpClient($httpClient);
-        $plugin->getHttpClient($callback);
-
-        $this->assertTrue($callbackFired);
-    }
-
-    public function testGetFreshClient()
-    {
-        $emitter = $this->getMock(
-            'Evenement\EventEmitterInterface',
-            [
-                'on',
-                'once',
-                'removeListener',
-                'removeAllListeners',
-                'listeners',
-                'emit',
-            ]
-        );
-        $emitter->expects($this->once())
-            ->method('emit')
-            ->with('dns.resolver')
-            ->will(
-                $this->returnCallback(
-                    function ($eventName, $callback) {
-                        $callback[0](
-                            $this->getMock(
-                                'React\Dns\Resolver\Resolver',
-                                [],
-                                [
-                                    $this->getMock('React\Dns\Query\ExecutorInterface'),
-                                    $this->getMock('React\Dns\Query\ExecutorInterface'),
-                                ]
-                            )
-                        );
-                    }
-                )
-            );
-
-        $callbackFired = false;
-        $callback = function ($httpClient) use (&$callbackFired) {
-            $this->assertInstanceOf('React\HttpClient\Client', $httpClient);
-            $callbackFired = true;
-        };
-
-        $plugin = new Plugin();
-        $plugin->setLoop($this->getMock('React\EventLoop\LoopInterface'));
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->setEventEmitter($emitter);
-        $plugin->getHttpClient($callback);
-
-        $this->assertTrue($callbackFired);
+        $plugin->setLoop($loop);
+        $this->assertEquals($loop, $plugin->getLoop($loop));
     }
 
     public function testGetResolver()
@@ -265,46 +199,38 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $httpRequest = $this->getMock(
-            'React\HttpClient\Request',
+        $httpClientAdapter = $this->getMock(
+            'WyriHaximus\React\RingPHP\HttpClientAdapter',
             [
-                'on',
-                'end',
+                '__invoke',
             ],
             [
-                $this->getMock('React\SocketClient\ConnectorInterface'),
-                $this->getMock(
-                    'React\HttpClient\RequestData',
-                    [],
-                    [
-                        '',
-                        '',
-                    ]
-                ),
-            ]
-        );
-        $httpClient = $this->getMock(
-            'React\HttpClient\Client',
-            [
-                'request',
-            ],
-            [
-                $this->getMock('React\SocketClient\ConnectorInterface'),
-                $this->getMock('React\SocketClient\ConnectorInterface'),
+                $this->getMock('React\EventLoop\LoopInterface'),
             ]
         );
 
-        $httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', 'http://example.com/')
-            ->willReturn($httpRequest);
+        $guzzleClient = $this->getMock(
+            'GuzzleHttp\Client',
+            [
+                'send',
+            ],
+            [
+                [
+                    'handler' => $httpClientAdapter,
+                ],
+            ]
+        );
+
+        $guzzleClient->expects($this->once())
+            ->method('send')
+            ->with($this->isInstanceOf('GuzzleHttp\Message\RequestInterface'))
+            ->willReturn(new FulfilledPromise());
 
         $plugin = new Plugin();
-        $plugin->setHttpClient($httpClient);
+        $plugin->setGuzzleClient($guzzleClient);
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->makeHttpRequest($request);
     }
-
     public function testMakeStreamingHttpRequest()
     {
         $request = new Request(
@@ -315,484 +241,36 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $httpRequest = $this->getMock(
-            'React\HttpClient\Request',
+        $httpClientAdapter = $this->getMock(
+            'WyriHaximus\React\RingPHP\HttpClientAdapter',
             [
-                'on',
-                'end',
+                '__invoke',
             ],
             [
-                $this->getMock('React\SocketClient\ConnectorInterface'),
-                $this->getMock(
-                    'React\HttpClient\RequestData',
-                    [],
-                    [
-                        '',
-                        '',
-                    ]
-                ),
-            ]
-        );
-        $httpClient = $this->getMock(
-            'React\HttpClient\Client',
-            [
-                'request',
-            ],
-            [
-                $this->getMock('React\SocketClient\ConnectorInterface'),
-                $this->getMock('React\SocketClient\ConnectorInterface'),
+                $this->getMock('React\EventLoop\LoopInterface'),
             ]
         );
 
-        $httpClient->expects($this->once())
-            ->method('request')
-            ->with('GET', 'http://example.com/')
-            ->willReturn($httpRequest);
+        $guzzleClient = $this->getMock(
+            'GuzzleHttp\Client',
+            [
+                'send',
+            ],
+            [
+                [
+                    'handler' => $httpClientAdapter,
+                ],
+            ]
+        );
+
+        $guzzleClient->expects($this->once())
+            ->method('send')
+            ->with($this->isInstanceOf('GuzzleHttp\Message\RequestInterface'))
+            ->willReturn(new FulfilledPromise());
 
         $plugin = new Plugin();
-        $plugin->setHttpClient($httpClient);
+        $plugin->setGuzzleClient($guzzleClient);
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->makeStreamingHttpRequest($request);
-    }
-
-    public function testOnResponse()
-    {
-        $stream = fopen('php://temp', 'r+');
-        $response = $this->getMock(
-            'React\HttpClient\Response',
-            [
-                'on',
-            ],
-            [
-                $this->getMock(
-                    'React\Stream\Stream',
-                    [],
-                    [
-                        $stream,
-                        $this->getMock('React\EventLoop\LoopInterface'),
-                    ]
-                ),
-                '',
-                '',
-                200,
-                '',
-                [
-                    'foo' => 'bar',
-                ],
-            ]
-        );
-
-        $response->expects($this->once())
-            ->method('on')
-            ->with('data', $this->isType('callable'))
-            ->willReturnCallback(
-                function ($void, $callback) {
-                    $callback('abc');
-                    return $callback;
-                }
-            );
-
-        $buffer = 'foo';
-        $httpReponse = 'bar';
-        $callbackFired = false;
-
-        $request = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-                'responseCallback' => function ($headers, $code) use (&$callbackFired) {
-                    $this->assertSame(
-                        [
-                            'foo' => 'bar',
-                        ],
-                        $headers
-                    );
-                    $this->assertSame(200, $code);
-                    $callbackFired = true;
-                },
-            ]
-        );
-
-        $plugin = new Plugin();
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->onResponse($response, $request, $buffer, $httpReponse, 123);
-
-        $this->assertTrue($callbackFired);
-
-        fclose($stream);
-    }
-
-    public function testOnResponseStream()
-    {
-        $stream = fopen('php://temp', 'r+');
-        $response = $this->getMock(
-            'React\HttpClient\Response',
-            [
-                'on',
-            ],
-            [
-                $this->getMock(
-                    'React\Stream\Stream',
-                    [],
-                    [
-                        $stream,
-                        $this->getMock('React\EventLoop\LoopInterface'),
-                    ]
-                ),
-                '',
-                '',
-                200,
-                '',
-                [
-                    'foo' => 'bar',
-                ],
-            ]
-        );
-
-        $response->expects($this->once())
-            ->method('on')
-            ->with('data', $this->isType('callable'))
-            ->willReturnCallback(
-                function ($void, $callback) {
-                    $callback('abc');
-                    return $callback;
-                }
-            );
-
-        $buffer = 'foo';
-        $httpReponse = 'bar';
-        $callbackFiredA = false;
-        $callbackFiredB = false;
-
-        $request = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-                'responseCallback' => function ($headers, $code) use (&$callbackFiredA) {
-                    $this->assertSame(
-                        [
-                            'foo' => 'bar',
-                        ],
-                        $headers
-                    );
-                    $this->assertSame(200, $code);
-                    $callbackFiredA = true;
-                },
-                'dataCallback' => function ($data) use (&$callbackFiredB) {
-                    $this->assertSame('abc', $data);
-                    $callbackFiredB = true;
-                },
-            ]
-        );
-
-        $plugin = new Plugin();
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->onResponseStream($response, $request, $buffer, $httpReponse, 123);
-
-        $this->assertTrue($callbackFiredA);
-        $this->assertTrue($callbackFiredB);
-
-        fclose($stream);
-    }
-
-    public function testOnEndResolve()
-    {
-        $stream = fopen('php://temp', 'r+');
-        $buffer = 'foo';
-        $callbackFired = false;
-
-        $request = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function ($buffer, $headers, $code) use (&$callbackFired) {
-                    $this->assertSame('foo', $buffer);
-                    $this->assertSame(
-                        [
-                            'foo' => 'bar',
-                        ],
-                        $headers
-                    );
-                    $this->assertSame(200, $code);
-                    $callbackFired = true;
-                },
-            ]
-        );
-
-        $response = $this->getMock(
-            'React\HttpClient\Response',
-            [
-                'on',
-            ],
-            [
-                $this->getMock(
-                    'React\Stream\Stream',
-                    [],
-                    [
-                        $stream,
-                        $this->getMock('React\EventLoop\LoopInterface'),
-                    ]
-                ),
-                '',
-                '',
-                200,
-                '',
-                [
-                    'foo' => 'bar',
-                ],
-            ]
-        );
-
-        $plugin = new Plugin();
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->onEnd($request, $buffer, $response, 123);
-
-        $this->assertTrue($callbackFired);
-
-        fclose($stream);
-    }
-
-    public function testOnEndReject()
-    {
-        $buffer = 'foo';
-        $response = 'error';
-        $callbackFired = false;
-
-        $request = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-                'rejectCallback' => function ($error) use (&$callbackFired) {
-                    $this->assertInstanceOf('\Exception', $error);
-                    $this->assertSame('Never received response', $error->getMessage());
-                    $callbackFired = true;
-                },
-            ]
-        );
-
-        $plugin = new Plugin();
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->onEnd($request, $buffer, $response, 123);
-
-        $this->assertTrue($callbackFired);
-    }
-
-    public function testOnHeadersWritten()
-    {
-        $connection = $this->getMock(
-            'React\SocketClient\ConnectorInterface',
-            [
-                'create',
-                'write',
-            ]
-        );
-        $connection->expects($this->once())
-            ->method('write')
-            ->with('foo:bar');
-
-        $request = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-                'body' => 'foo:bar',
-            ]
-        );
-
-        $plugin = new Plugin();
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->onHeadersWritten($connection, $request, 123);
-    }
-
-    public function testOnError()
-    {
-        $callbackFired = false;
-
-        $request = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-                'rejectCallback' => function ($error) use (&$callbackFired) {
-                    $this->assertInstanceOf('\Exception', $error);
-                    $this->assertSame('abc', $error->getMessage());
-                    $callbackFired = true;
-                },
-            ]
-        );
-
-        $plugin = new Plugin();
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->onError(new \Exception('abc'), $request, 123);
-
-        $this->assertTrue($callbackFired);
-    }
-
-    public function testMakeHttpRequestCallbacks()
-    {
-        $httpRequest = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-            ]
-        );
-        $request = Phake::mock('React\HttpClient\Request');
-        $response = Phake::mock('React\HttpClient\Response');
-        $connection = Phake::mock('React\Stream\Stream');
-        $error = new \Exception();
-
-        $httpClient = Phake::mock('React\HttpClient\Client');
-        Phake::when($httpClient)->request('GET', 'http://example.com/', [])->thenReturn($request);
-
-        $plugin = Phake::partialMock('\WyriHaximus\Phergie\Plugin\Http\Plugin');
-        Phake::when($plugin)->getHttpClient($this->isType('callable'))->thenReturn($httpClient);
-        Phake::when($plugin)->onResponse($response, $httpRequest, '', null, $this->isType('string'))->thenReturn(true);
-        Phake::when($plugin)->onEnd($httpRequest, '', null, $this->isType('string'))->thenReturn(true);
-        Phake::when($plugin)->onHeadersWritten($connection, $httpRequest, $this->isType('string'))->thenReturn(true);
-        Phake::when($plugin)->onError($error, $httpRequest, $this->isType('string'))->thenReturn(true);
-
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->makeHttpRequest($httpRequest);
-
-        Phake::verify($plugin)->getHttpClient(
-            Phake::capture($callbackClient)->when($this->isType('callable'))
-        );
-        $callbackClient($httpClient);
-
-        Phake::verify($request)->on(
-            'response',
-            Phake::capture($callbackOnRequest)->when($this->isType('callable'))
-        );
-        $callbackOnRequest($response);
-        Phake::verify($plugin)->onResponse(
-            $response,
-            $httpRequest,
-            '',
-            null,
-            $this->isType('string')
-        );
-
-        Phake::verify($request)->on(
-            'end',
-            Phake::capture($callbackOnEnd)->when($this->isType('callable'))
-        );
-        $callbackOnEnd();
-        Phake::verify($plugin)->onEnd(
-            $httpRequest,
-            '',
-            null,
-            $this->isType('string')
-        );
-
-        Phake::verify($request)->on(
-            'headers-written',
-            Phake::capture($callbackOnHeadersWritten)->when($this->isType('callable'))
-        );
-        $callbackOnHeadersWritten($connection);
-        Phake::verify($plugin)->onHeadersWritten(
-            $connection,
-            $httpRequest,
-            $this->isType('string')
-        );
-
-        Phake::verify($request)->on(
-            'error',
-            Phake::capture($callbackOnError)->when($this->isType('callable'))
-        );
-        $callbackOnError($error);
-        Phake::verify($plugin)->onError(
-            $error,
-            $httpRequest,
-            $this->isType('string')
-        );
-    }
-
-    public function testStreamingMakeHttpRequestCallbacks()
-    {
-        $httpRequest = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-            ]
-        );
-        $request = Phake::mock('React\HttpClient\Request');
-        $response = Phake::mock('React\HttpClient\Response');
-        $connection = Phake::mock('React\Stream\Stream');
-        $error = new \Exception();
-
-        $httpClient = Phake::mock('React\HttpClient\Client');
-        Phake::when($httpClient)->request('GET', 'http://example.com/', [])->thenReturn($request);
-
-        $plugin = Phake::partialMock('\WyriHaximus\Phergie\Plugin\Http\Plugin');
-        Phake::when($plugin)->getHttpClient($this->isType('callable'))->thenReturn($httpClient);
-        Phake::when($plugin)->onResponseStream(
-            $response,
-            $httpRequest,
-            '',
-            null,
-            $this->isType('string')
-        )->thenReturn(true);
-        Phake::when($plugin)->onEnd($httpRequest, '', null, $this->isType('string'))->thenReturn(true);
-        Phake::when($plugin)->onHeadersWritten($connection, $httpRequest, $this->isType('string'))->thenReturn(true);
-        Phake::when($plugin)->onError($error, $httpRequest, $this->isType('string'))->thenReturn(true);
-
-        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
-        $plugin->makeStreamingHttpRequest($httpRequest);
-
-        Phake::verify($plugin)->getHttpClient(
-            Phake::capture($callbackClient)->when($this->isType('callable'))
-        );
-        $callbackClient($httpClient);
-
-        Phake::verify($request)->on(
-            'response',
-            Phake::capture($callbackOnRequest)->when($this->isType('callable'))
-        );
-        $callbackOnRequest($response);
-        Phake::verify($plugin)->onResponseStream(
-            $response,
-            $httpRequest,
-            '',
-            null,
-            $this->isType('string')
-        );
-
-        Phake::verify($request)->on(
-            'end',
-            Phake::capture($callbackOnEnd)->when($this->isType('callable'))
-        );
-        $callbackOnEnd();
-        Phake::verify($plugin)->onEnd(
-            $httpRequest,
-            '',
-            null,
-            $this->isType('string')
-        );
-
-        Phake::verify($request)->on(
-            'headers-written',
-            Phake::capture($callbackOnHeadersWritten)->when($this->isType('callable'))
-        );
-        $callbackOnHeadersWritten($connection);
-        Phake::verify($plugin)->onHeadersWritten(
-            $connection,
-            $httpRequest,
-            $this->isType('string')
-        );
-
-        Phake::verify($request)->on(
-            'error',
-            Phake::capture($callbackOnError)->when($this->isType('callable'))
-        );
-        $callbackOnError($error);
-        Phake::verify($plugin)->onError(
-            $error,
-            $httpRequest,
-            $this->isType('string')
-        );
     }
 }
