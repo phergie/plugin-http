@@ -31,7 +31,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $config = $request->getConfig();
-        $this->assertSame(8, count($config));
+        $this->assertSame(6, count($config));
         $this->assertTrue(isset($config['url']));
         $this->assertSame('http://example.com/', $config['url']);
         $this->assertTrue(isset($config['resolveCallback']));
@@ -42,10 +42,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], $config['headers']);
         $this->assertTrue(isset($config['body']));
         $this->assertSame('', $config['body']);
-        $this->assertTrue(isset($config['responseCallback']));
-        $this->assertInternalType('callable', $config['responseCallback']);
-        $this->assertTrue(isset($config['dataCallback']));
-        $this->assertInternalType('callable', $config['dataCallback']);
         $this->assertTrue(isset($config['rejectCallback']));
         $this->assertInternalType('callable', $config['rejectCallback']);
         $this->assertSame('GET', $request->getMethod());
@@ -142,15 +138,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testCallResolve()
     {
         $callbackFired = false;
-        $callback = function ($buffer, $headers, $code) use (&$callbackFired) {
-            $this->assertSame('bar:foo', $buffer);
-            $this->assertSame(
-                [
-                    'bar' => 'foo',
-                ],
-                $headers
-            );
-            $this->assertSame(123, $code);
+        $callback = function ($response) use (&$callbackFired) {
+            $this->assertSame('bar:foo', $response);
             $callbackFired = true;
         };
 
@@ -162,11 +151,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         );
 
         $request->callResolve(
-            'bar:foo',
-            [
-                'bar' => 'foo',
-            ],
-            123
+            'bar:foo'
         );
         $this->assertTrue($callbackFired);
     }
@@ -189,59 +174,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         );
 
         $request->callReject('bar:foo');
-        $this->assertTrue($callbackFired);
-    }
-
-    public function testCallResponse()
-    {
-        $callbackFired = false;
-        $callback = function ($headers, $code) use (&$callbackFired) {
-            $this->assertSame(
-                [
-                    'bar' => 'foo'
-                ],
-                $headers
-            );
-            $this->assertSame(123, $code);
-            $callbackFired = true;
-        };
-
-        $request = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-                'responseCallback' => $callback,
-            ]
-        );
-
-        $request->callResponse(
-            [
-                'bar' => 'foo'
-            ],
-            123
-        );
-        $this->assertTrue($callbackFired);
-    }
-
-    public function testCallData()
-    {
-        $callbackFired = false;
-        $callback = function ($data) use (&$callbackFired) {
-            $this->assertSame('bar:foo', $data);
-            $callbackFired = true;
-        };
-
-        $request = new Request(
-            [
-                'url' => 'http://example.com/',
-                'resolveCallback' => function () {
-                },
-                'dataCallback' => $callback,
-            ]
-        );
-
-        $request->callData('bar:foo');
         $this->assertTrue($callbackFired);
     }
 }
