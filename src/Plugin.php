@@ -168,6 +168,14 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         );
     }
 
+    /**
+     * @param Client $client
+     */
+    public function setGuzzleClient(Client $client)
+    {
+        $this->client = $client;
+    }
+
 
     /**
      * @param callable $callback
