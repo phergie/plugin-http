@@ -31,6 +31,11 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     protected $loop;
 
     /**
+     * @var Resolver
+     */
+    protected $resolver;
+
+    /**
      * @var string
      */
     protected $dnsResolverEvent = 'dns.resolver';
@@ -184,5 +189,13 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                 }
             ]
         );
+    }
+
+    /**
+     * @param Resolver $resolver
+     */
+    public function setResolver(Resolver $resolver)
+    {
+        $this->resolver = $resolver;
     }
 }
