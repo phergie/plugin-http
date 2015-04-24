@@ -41,6 +41,11 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     protected $dnsResolverEvent = 'dns.resolver';
 
     /**
+     * @var array
+     */
+    protected $guzzleClientOptions = [];
+
+    /**
      * Accepts plugin configuration.
      *
      * Supported keys:
@@ -53,6 +58,10 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     {
         if (isset($config['dnsResolverEvent'])) {
             $this->dnsResolverEvent = $config['dnsResolverEvent'];
+        }
+
+        if (isset($config['guzzleClientOptions']) && is_array($config['guzzleClientOptions'])) {
+            $this->guzzleClientOptions = $config['guzzleClientOptions'];
         }
     }
 
@@ -160,9 +169,9 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
         $this->getResolver(
             function ($resolver) use ($callback) {
                 $this->logDebug('Requesting DNS Resolver');
-                $this->client = new Client([
-                    'handler' => new HttpClientAdapter($this->loop, null, $resolver),
-                ]);
+                $options = $this->guzzleClientOptions;
+                $options['handler'] = new HttpClientAdapter($this->loop, null, $resolver);
+                $this->client = new Client($options);
                 $callback($this->client);
             }
         );

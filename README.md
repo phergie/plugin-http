@@ -34,6 +34,8 @@ return [
             // All configuration is optional
 
             'dnsResolverEvent' => 'dns.resolver', // Event for retrieving the DNS resolver, defaults to 'dns.resolver'
+            
+            'guzzleClientOptions' => [], // Array with options passed into the Guzzle Client constructor (don't set a handler in here it will be overwritten)
 
         ]),
 
