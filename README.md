@@ -1,4 +1,4 @@
-# WyriHaximus/PhergieHttp
+# HTTP Plugin
 
 [Phergie](http://github.com/phergie/phergie-irc-bot-react/) plugin for Provide HTTP functionality to other plugins.
 
@@ -9,7 +9,7 @@
 To install via [Composer](http://getcomposer.org/), use the command below, it will automatically detect the latest version and bind it with `~`.
 
 ```
-composer require wyrihaximus/phergie-http 
+composer require phergie/phergie-irc-plugin-http 
 ```
 
 See Phergie documentation for more information on
@@ -17,7 +17,7 @@ See Phergie documentation for more information on
 
 ## Requirements
 
-The HTTP plugin requires the [DNS plugin](https://github.com/WyriHaximus/PhergieDns) to be setup for DNS resolving.
+The HTTP plugin requires the [DNS plugin](https://github.com/phergie/plugin-dns) to be setup for DNS resolving.
 
 ## Configuration
 
@@ -27,9 +27,9 @@ return [
     'plugins' => [
 
         // dependency
-        new \WyriHaximus\Phergie\Plugin\Dns\Plugin, // Needed to do DNS lookups
+        new \Phergie\Plugin\Dns\Plugin, // Needed to do DNS lookups
 
-        new \WyriHaximus\Phergie\Plugin\Http\Plugin([
+        new \Phergie\Plugin\Http\Plugin([
 
             // All configuration is optional
 
@@ -59,7 +59,7 @@ $this->emitter->emit('http.client', [
 ### Make a HTTP request
 
 ```php
-$this->emitter->emit('http.request', [new \WyriHaximus\Phergie\Plugin\Http\Request([
+$this->emitter->emit('http.request', [new \Phergie\Plugin\Http\Request([
     'url' => 'https://github.com/',                     // Required
     'resolveCallback' => function($response) { // Required
         // Data received do something with it

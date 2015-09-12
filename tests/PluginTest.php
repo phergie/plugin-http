@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace WyriHaximus\Phergie\Tests\Plugin\Http;
+namespace Phergie\Tests\Plugin\Http;
 
 use React\Promise\FulfilledPromise;
-use WyriHaximus\Phergie\Plugin\Http\Plugin;
-use WyriHaximus\Phergie\Plugin\Http\Request;
+use Phergie\Plugin\Http\Plugin;
+use Phergie\Plugin\Http\Request;
 
 /**
  * Tests for the Plugin class.
  *
  * @category Phergie
- * @package WyriHaximus\Phergie\Plugin\Http
+ * @package Phergie\Plugin\Http
  */
 class PluginTest extends \PHPUnit_Framework_TestCase
 {

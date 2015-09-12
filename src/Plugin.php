@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WyriHaximus\Phergie\Plugin\Http;
+namespace Phergie\Plugin\Http;
 
 use GuzzleHttp\Client;
 use Phergie\Irc\Bot\React\AbstractPlugin;
@@ -21,7 +21,7 @@ use WyriHaximus\React\RingPHP\HttpClientAdapter;
  * Plugin for Provide HTTP functionality to other plugins.
  *
  * @category Phergie
- * @package WyriHaximus\Phergie\Plugin\Http
+ * @package Phergie\Plugin\Http
  */
 class Plugin extends AbstractPlugin implements LoopAwareInterface
 {

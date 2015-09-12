@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WyriHaximus\Phergie\Plugin\Http;
+namespace Phergie\Plugin\Http;
 
 /**
  * Plugin for Provide HTTP functionality to other plugins.
  *
  * @category Phergie
- * @package WyriHaximus\Phergie\Plugin\Http
+ * @package Phergie\Plugin\Http
  */
 class Request
 {
