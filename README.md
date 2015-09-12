@@ -2,7 +2,7 @@
 
 [Phergie](http://github.com/phergie/phergie-irc-bot-react/) plugin for Provide HTTP functionality to other plugins.
 
-[![Build Status](https://secure.travis-ci.org/WyriHaximus/PhergieHttp.png?branch=master)](http://travis-ci.org/WyriHaximus/PhergieHttp)
+[![Build Status](https://secure.travis-ci.org/phergie/plugin-http.png?branch=master)](http://travis-ci.org/phergie/plugin-http)
 
 ## Install
 
