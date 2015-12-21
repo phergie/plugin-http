@@ -13,8 +13,8 @@
         "irc": "irc://irc.freenode.net/phergie"
     },
     "require": {
-        "php": ">=5.4.0",
-        "phergie/phergie-irc-bot-react": "~1.0",
+        "php": ">=5.5",
+        "phergie/phergie-irc-bot-react": "~2.0",
         "wyrihaximus/react-guzzle-ring": "^1.0",
         "phergie/phergie-irc-plugin-dns": "^3.0"
     },
