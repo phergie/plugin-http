@@ -185,8 +185,28 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyMakeHttpRequest()
     {
-        $plugin = new Plugin();
-        $plugin->makeHttpRequest();
+        if (PHP_MAJOR_VERSION === 5)
+        {
+            $plugin = new Plugin();
+            $plugin->makeHttpRequest();
+        }
+        else
+        {
+            trigger_error('PHPUnit_Framework_Error');
+        }
+    }
+
+    /**
+     * @requires PHP 7
+     */
+    public function testEmptyMakeHttpRequest70()
+    {
+        try {
+            $plugin = new Plugin();
+            $plugin->makeHttpRequest();
+        } catch (\TypeError $e) {
+            $this->assertInstanceOf('TypeError', $e);
+        }
     }
 
     public function testMakeHttpRequest()
