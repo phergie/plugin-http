@@ -19,7 +19,7 @@
         "phergie/phergie-irc-plugin-dns": "^4.0"
     },
     "require-dev": {
-        "phergie/phergie-irc-bot-react-development": "^1.0.2|^1.1"
+        "phergie/phergie-irc-bot-react-development": "^1.0.2"
     },
     "autoload": {
         "psr-4": {
