@@ -16,7 +16,7 @@
         "php": ">=5.5",
         "phergie/phergie-irc-bot-react": "~2.0",
         "wyrihaximus/react-guzzle-ring": "^1.0",
-        "phergie/phergie-irc-plugin-dns": "^3.0"
+        "phergie/phergie-irc-plugin-dns": "^4.0"
     },
     "require-dev": {
         "phergie/phergie-irc-bot-react-development": "^1.0.2|^1.1"
