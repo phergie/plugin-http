@@ -55,6 +55,22 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyConfig()
     {
+        if (PHP_MAJOR_VERSION === 5)
+        {
+            new Request();
+        }
+        else
+        {
+            trigger_error('PHPUnit_Framework_Error');
+        }
+    }
+
+    /**
+     * @requires PHP 7
+     * @expectedException TypeError
+     */
+    public function testEmptyConfig70()
+    {
         new Request();
     }
 
