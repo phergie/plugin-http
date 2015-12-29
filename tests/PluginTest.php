@@ -197,13 +197,16 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @requires PHP 7.0
-     * @expectedException TypeError
+     * @requires PHP 7
      */
     public function testEmptyMakeHttpRequest70()
     {
-        $plugin = new Plugin();
-        $plugin->makeHttpRequest();
+        try {
+            $plugin = new Plugin();
+            $plugin->makeHttpRequest();
+        } catch (\TypeError $e) {
+            $this->assertInstanceOf('TypeError', $e);
+        }
     }
 
     public function testMakeHttpRequest()

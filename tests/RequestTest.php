@@ -67,11 +67,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @requires PHP 7
-     * @expectedException TypeError
      */
     public function testEmptyConfig70()
     {
-        new Request();
+        try {
+            new Request();
+        } catch (\TypeError $e) {
+            $this->assertInstanceOf('TypeError', $e);
+        }
     }
 
     /**
