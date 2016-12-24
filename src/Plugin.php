@@ -113,7 +113,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                 $requestObject = $client->createRequest($request->getMethod(), $request->getUrl(), [
                     'future' => true,
                     'stream' => false,
-                    'headers' => $request->getHeaders()
+                    'headers' => $request->getHeaders(),
                 ]);
                 $this->logDebug('[' . $requestId . ']Sending request');
                 $client->send($requestObject)->then(function ($response) use ($requestId, $request) {
@@ -140,6 +140,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                 $requestObject = $client->createRequest($request->getMethod(), $request->getUrl(), [
                     'future' => true,
                     'stream' => true,
+                    'headers' => $request->getHeaders(),
                 ]);
                 $this->logDebug('[' . $requestId . ']Sending request');
                 $client->send($requestObject)->then(function ($response) use ($requestId, $request) {
