@@ -293,4 +293,114 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
         $plugin->makeStreamingHttpRequest($request);
     }
+    public function testMakeHttpRequestWithHeaders()
+    {
+        $request = $this->getMock(
+            '\Phergie\Plugin\Http\Request',
+            [
+                'getHeaders'
+            ],
+            [
+                [
+                    'url' => 'http://example.com/',
+                    'headers' => [
+                        'Accept' => 'text/html'
+                    ],
+                    'resolveCallback' => function () {
+                    }
+                ]
+            ]
+        );
+
+        $httpClientAdapter = $this->getMock(
+            'WyriHaximus\React\RingPHP\HttpClientAdapter',
+            [
+                '__invoke',
+            ],
+            [
+                $this->getMock('React\EventLoop\LoopInterface'),
+            ]
+        );
+
+        $guzzleClient = $this->getMock(
+            'GuzzleHttp\Client',
+            [
+                'send',
+            ],
+            [
+                [
+                    'handler' => $httpClientAdapter,
+                ],
+            ]
+        );
+
+        $request->expects($this->once())
+            ->method('getHeaders')
+            ->willReturn(['Accept' => 'text/html']);
+
+        $guzzleClient->expects($this->once())
+            ->method('send')
+            ->with($this->isInstanceOf('GuzzleHttp\Message\RequestInterface'))
+            ->willReturn(new FulfilledPromise());
+
+        $plugin = new Plugin();
+        $plugin->setGuzzleClient($guzzleClient);
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->makeHttpRequest($request);
+    }
+    public function testMakeStreamingHttpRequestWithHeaders()
+    {
+        $request = $this->getMock(
+            '\Phergie\Plugin\Http\Request',
+            [
+                'getHeaders'
+            ],
+            [
+                [
+                    'url' => 'http://example.com/',
+                    'headers' => [
+                        'Accept' => 'text/html'
+                    ],
+                    'resolveCallback' => function () {
+                    }
+                ]
+            ]
+        );
+
+        $httpClientAdapter = $this->getMock(
+            'WyriHaximus\React\RingPHP\HttpClientAdapter',
+            [
+                '__invoke',
+            ],
+            [
+                $this->getMock('React\EventLoop\LoopInterface'),
+            ]
+        );
+
+        $guzzleClient = $this->getMock(
+            'GuzzleHttp\Client',
+            [
+                'send',
+            ],
+            [
+                [
+                    'handler' => $httpClientAdapter,
+                ],
+            ]
+        );
+
+        $request->expects($this->once())
+            ->method('getHeaders')
+            ->willReturn(['Accept' => 'text/html']);
+
+        $guzzleClient->expects($this->once())
+            ->method('send')
+            ->with($this->isInstanceOf('GuzzleHttp\Message\RequestInterface'))
+            ->willReturn(new FulfilledPromise());
+
+        $plugin = new Plugin();
+        $plugin->setGuzzleClient($guzzleClient);
+        $plugin->setLogger($this->getMock('Psr\Log\LoggerInterface'));
+        $plugin->makeStreamingHttpRequest($request);
+    }
 }
