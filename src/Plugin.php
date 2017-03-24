@@ -96,9 +96,9 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
     /**
      * @param $message
      */
-    public function logDebug($message)
+    public function logDebug($message, $context = [])
     {
-        $this->logger->debug('[Http]' . $message);
+        $this->logger->debug('[Http]' . $message, $context);
     }
 
     /**
@@ -121,6 +121,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                     $request->callResolve($response);
                 }, function ($error) use ($requestId, $request) {
                     $this->logDebug('[' . $requestId . ']Error during request');
+                    $this->logDebug('[' . $requestId . ']', [$error->getMessage()]);
                     $request->callReject($error);
                 });
 
@@ -148,6 +149,7 @@ class Plugin extends AbstractPlugin implements LoopAwareInterface
                     $request->callResolve($response);
                 }, function ($error) use ($requestId, $request) {
                     $this->logDebug('[' . $requestId . ']Error during request');
+                    $this->logDebug('[' . $requestId . ']', [$error->getMessage()]);
                     $request->callReject($error);
                 });
 
