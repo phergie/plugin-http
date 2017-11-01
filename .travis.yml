@@ -34,8 +34,8 @@ matrix:
 ## Update composer and run the appropriate composer command
 before_script:
   - composer self-update -q
-  - composer config --unset platform.php
   - if [ -z "$dependencies" ]; then composer install; fi;
+  - composer config --unset platform.php
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest; fi;
   - if [ "$dependencies" = "highest" ]; then composer update; fi;
   - composer show -i
