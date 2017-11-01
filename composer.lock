@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe066ab31fb3c5344a5cdd255cbcc16b",
+    "content-hash": "e0648e430fbf367a55260df52b0ea8b7",
     "packages": [
         {
             "name": "clue/buzz-react",
@@ -563,16 +563,16 @@
         },
         {
             "name": "phergie/phergie-irc-client-react",
-            "version": "dev-reactphp-1.0",
+            "version": "3.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WyriHaximus-labs/phergie-irc-client-react.git",
-                "reference": "4ebbd42020f191b1530acedd24ed10fe3e30bd34"
+                "url": "https://github.com/phergie/phergie-irc-client-react.git",
+                "reference": "2ed4602c29c63ac0b9a1d4c42292c52a6c2f79f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus-labs/phergie-irc-client-react/zipball/4ebbd42020f191b1530acedd24ed10fe3e30bd34",
-                "reference": "4ebbd42020f191b1530acedd24ed10fe3e30bd34",
+                "url": "https://api.github.com/repos/phergie/phergie-irc-client-react/zipball/2ed4602c29c63ac0b9a1d4c42292c52a6c2f79f1",
+                "reference": "2ed4602c29c63ac0b9a1d4c42292c52a6c2f79f1",
                 "shasum": ""
             },
             "require": {
@@ -585,8 +585,8 @@
                 "react/dns": "~0.4.0",
                 "react/event-loop": "^1.0 || ^0.5 || ^0.4.0",
                 "react/promise": "~2.0",
-                "react/socket": "^1.0 || ^0.8",
-                "react/stream": "^1.0 || ^0.7"
+                "react/socket": "^1.0 || ^0.8 || ^0.7",
+                "react/stream": "^1.0 || ^0.7 || ^0.6 || ^0.5 || ^0.4"
             },
             "conflict": {
                 "phergie/phergie-irc-plugin-react-pong": "*"
@@ -600,11 +600,7 @@
                     "Phergie\\Irc\\Client\\React\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Phergie\\Irc\\Tests\\Client\\React\\": "tests"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-2-Clause"
             ],
@@ -614,13 +610,7 @@
                 "irc",
                 "react"
             ],
-            "support": {
-                "email": "team@phergie.org",
-                "irc": "irc://irc.freenode.net/phergie",
-                "issues": "https://github.com/phergie/phergie-irc-client-react/issues",
-                "source": "https://github.com/phergie/phergie-irc-client-react"
-            },
-            "time": "2017-10-18T19:10:29+00:00"
+            "time": "2017-11-01T14:45:46+00:00"
         },
         {
             "name": "phergie/phergie-irc-connection",
@@ -1486,20 +1476,21 @@
         },
         {
             "name": "wyrihaximus/ticking-promise",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WyriHaximus/TickingPromise.git",
-                "reference": "8d26b1458e32c367ba6fb8ad5042046279acdb12"
+                "reference": "6b9f9abc74bb52ba3a479f8d3b8889579cd2cd6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/TickingPromise/zipball/8d26b1458e32c367ba6fb8ad5042046279acdb12",
-                "reference": "8d26b1458e32c367ba6fb8ad5042046279acdb12",
+                "url": "https://api.github.com/repos/WyriHaximus/TickingPromise/zipball/6b9f9abc74bb52ba3a479f8d3b8889579cd2cd6f",
+                "reference": "6b9f9abc74bb52ba3a479f8d3b8889579cd2cd6f",
                 "shasum": ""
             },
             "require": {
-                "react/event-loop": "^0.4",
+                "php": "^7.0 || ^5.4",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4",
                 "react/promise": "~2.1"
             },
             "require-dev": {
@@ -1528,7 +1519,7 @@
                 }
             ],
             "description": "Wrapping ticks into a promise",
-            "time": "2016-03-05T20:23:05+00:00"
+            "time": "2017-10-31T21:46:39+00:00"
         }
     ],
     "packages-dev": [
@@ -3487,18 +3478,9 @@
             "time": "2016-11-23T20:04:58+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "3.1.0",
-            "alias_normalized": "3.1.0.0",
-            "version": "dev-reactphp-1.0",
-            "package": "phergie/phergie-irc-client-react"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "phergie/phergie-irc-client-react": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
