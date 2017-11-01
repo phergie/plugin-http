@@ -30,5 +30,11 @@
         "psr-4": {
             "Phergie\\Tests\\Plugin\\Http\\": "tests"
         }
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+          "php": "7.6.19"
+        }
     }
 }
